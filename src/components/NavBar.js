@@ -1,16 +1,16 @@
-import * as React from 'react'
+import { useEffect, useState } from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 
 const NavBar = () => {
-  const [appBarStyle, setAppBarStyle] = React.useState({
+  const [appBarStyle, setAppBarStyle] = useState({
     background: 'transparent',
     boxShadow: 'none',
     transition: 'background .5s ease-out',
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     const onScroll = e => {
       if (e.target.documentElement.scrollTop >= 100) {
         setAppBarStyle({

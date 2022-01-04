@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import { NavBar } from './NavBar'
 import { Row } from './Row'
 import { Footer } from './Footer'
@@ -26,10 +26,10 @@ const useStyles = makeStyles(theme => ({
 const NetfilmApp = () => {
   const classes = useStyles()
   const { data: headerMovie, error, status, execute } = useFetchData()
-  const [type] = React.useState(getRandomType())
+  const [type] = useState(getRandomType())
   const defaultMovieId = getRandomId(type)
 
-  React.useEffect(() => {
+  useEffect(() => {
     execute(clientApi(`${type}/${defaultMovieId}`))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -38,7 +38,7 @@ const NetfilmApp = () => {
     throw new Error(error.message)
   }
   return (
-    <div>
+    <>
       <NavBar />
       <Header movie={headerMovie?.data} type={type} />
       <Row
@@ -94,7 +94,7 @@ const NetfilmApp = () => {
         </div>
       ) : null}
       <Footer color='secondary' si />
-    </div>
+    </>
   )
 }
 export { NetfilmApp }

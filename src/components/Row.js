@@ -1,9 +1,9 @@
-import * as React from 'react'
+import { useEffect } from 'react'
 import { TYPE_MOVIE, imagePath400 } from '../config'
 import { useFetchData } from '../utils/hooks'
 import { clientApi } from '../utils/clientApi'
 import { Alert, AlertTitle } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
+import { RowSkeleton } from 'skeletons/RowSkeleton'
 
 const Row = ({
   title = '',
@@ -27,7 +27,7 @@ const Row = ({
     (filter === 'genre' && endpointGenre) ||
     (filter === 'trending' && endpointTrending)
 
-  React.useEffect(() => {
+  useEffect(() => {
     execute(clientApi(`${endpoint}`))
   }, [endpoint, execute])
 
@@ -39,14 +39,7 @@ const Row = ({
   const watermarkClass = watermark ? 'watermarked' : ''
 
   if (status === 'fetching' || status === 'idle') {
-    return (
-      <div className='row'>
-        <h2>{title}</h2>
-        <div className='row__posters'>
-          <CircularProgress />
-        </div>
-      </div>
-    )
+    return <RowSkeleton title={title} wideImage={wideImage} />
   }
 
   //   if (status === 'error') {

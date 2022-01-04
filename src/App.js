@@ -18,7 +18,7 @@ const theme = createTheme({
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <div>
+    <>
       <NavBar />
       <div
         role='alert'
@@ -43,7 +43,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

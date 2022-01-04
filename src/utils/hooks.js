@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useReducer, useCallback } from 'react'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -12,23 +12,25 @@ const reducer = (state, action) => {
       throw new Error(`L'action ${action.type} n'est pas supportée.`)
   }
 }
+
 const initialState = {
   data: null,
   error: null,
   status: 'idle',
 }
+
 function useFetchData() {
-  const [state, dispatch] = React.useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const { data, error, status } = state
 
-  const execute = React.useCallback(promise => {
+  const execute = useCallback(promise => {
     dispatch({ type: 'fetching' })
     promise
       .then(response => dispatch({ type: 'done', payload: response }))
       .catch(error => dispatch({ type: 'fail', error }))
   }, [])
 
-  const setData = React.useCallback(
+  const setData = useCallback(
     data => dispatch({ type: 'done', payload: data }),
     [dispatch]
   )
