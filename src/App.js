@@ -1,8 +1,14 @@
-import { NetfilmApp } from 'components/NetfilmApp'
+import { NetfilmsApp } from 'components/NetfilmsApp'
 import { ThemeProvider } from '@mui/styles'
 import { createTheme } from '@mui/material/styles'
-import { NavBar } from 'components/NavBar'
 import { ErrorBoundary } from 'react-error-boundary'
+import ErrorFallback from 'components/ErrorFallback'
+import Error404 from './components/Error404'
+import { Movies } from './components/Movies'
+import { Series } from './components/Series'
+import { News } from './components/News'
+import { SelectById } from 'components/SelectById'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 const theme = createTheme({
   palette: {
@@ -16,49 +22,28 @@ const theme = createTheme({
   },
 })
 
-function ErrorFallback({ error, resetErrorBoundary }) {
-  return (
-    <>
-      <NavBar />
-      <div
-        role='alert'
-        style={{
-          height: '100%',
-          textAlign: 'center',
-          margin: '100px 300px',
-          color: '#fff',
-        }}
-      >
-        <h1 style={{ fontSize: '2.5em' }}>Vous cherchez votre chemin ?</h1>
-        <pre style={{ color: 'red', fontSize: '1em' }}>
-          Erreur : {error.message}
-        </pre>
-
-        <div className='banner__buttons'>
-          <button
-            className='banner__button banner__buttonplay'
-            onClick={resetErrorBoundary}
-          >
-            Accueil
-          </button>
-        </div>
-      </div>
-    </>
-  )
-}
-
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <ErrorBoundary
-        FallbackComponent={ErrorFallback}
-        // onReset={() => {
-        //   // reset the state of your app so the error doesn't happen again
-        // }}
-      >
-        <NetfilmApp />
-      </ErrorBoundary>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Routes>
+            <Route path='/' exact strict element={<NetfilmsApp />} />
+            <Route path='/tv/:tvId' exact strict element={<SelectById />} />
+            <Route
+              path='/movie/:movieId'
+              exact
+              strict
+              element={<SelectById />}
+            />
+            <Route path='/series' exact strict element={<Series />} />
+            <Route path='/movies' exact strict element={<Movies />} />
+            <Route path='/news' exact strict element={<News />} />
+            <Route path='/*' exact strict element={<Error404 />} />
+          </Routes>
+        </ErrorBoundary>
+      </ThemeProvider>
+    </Router>
   )
 }
 

@@ -16,7 +16,7 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
   if (!movie) {
     return <HeaderSkeleton />
   }
-
+  //FIXME affichage title
   return (
     <header style={banner}>
       <div className='banner__contents'>
