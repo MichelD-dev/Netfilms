@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const NetfilmApp = () => {
+const NetfilmsApp = () => {
   const classes = useStyles()
   const { data: headerMovie, error, status, execute } = useFetchData()
   const [type] = useState(getRandomType())
@@ -31,8 +31,7 @@ const NetfilmApp = () => {
 
   useEffect(() => {
     execute(clientApi(`${type}/${defaultMovieId}`))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [execute, type])
 
   if (status === 'error') {
     throw new Error(error.message)
@@ -54,7 +53,6 @@ const NetfilmApp = () => {
         filter='trending'
         title='Séries: les dernières tendances'
       />
-
       <Row
         type={TYPE_MOVIE}
         filter='toprated'
@@ -62,7 +60,6 @@ const NetfilmApp = () => {
         watermark
         wideImage
       />
-
       <Row
         type={TYPE_TV}
         filter='genre'
@@ -71,7 +68,6 @@ const NetfilmApp = () => {
         watermark
         wideImage
       />
-
       <Row
         type={TYPE_MOVIE}
         filter='genre'
@@ -93,8 +89,8 @@ const NetfilmApp = () => {
           <CircularProgress />{' '}
         </div>
       ) : null}
-      <Footer color='secondary' si />
+      <Footer />
     </>
   )
 }
-export { NetfilmApp }
+export { NetfilmsApp }

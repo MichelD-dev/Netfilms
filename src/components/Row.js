@@ -4,6 +4,7 @@ import { useFetchData } from '../utils/hooks'
 import { clientApi } from '../utils/clientApi'
 import { Alert, AlertTitle } from '@mui/material'
 import { RowSkeleton } from 'skeletons/RowSkeleton'
+import { Link } from 'react-router-dom'
 
 const Row = ({
   title = '',
@@ -14,6 +15,7 @@ const Row = ({
   watermark = false,
 }) => {
   const { data, error, status, execute } = useFetchData()
+
   const endpointLatest = `${type}/latest`
   const endpointPopular = `${type}/popular`
   const endpointTopRated = `${type}/top_rated`
@@ -33,7 +35,7 @@ const Row = ({
 
   const buildImagePath = data => {
     const image = wideImage ? data?.backdrop_path : data?.poster_path
-    return `${imagePath400}${image}`
+    return image ? `${imagePath400}${image}` : null
   }
 
   const watermarkClass = watermark ? 'watermarked' : ''
@@ -42,14 +44,14 @@ const Row = ({
     return <RowSkeleton title={title} wideImage={wideImage} />
   }
 
-  //   if (status === 'error') {
-  //     return (
-  //       <Alert severity='error'>
-  //         <AlertTitle>Une erreur est survenue</AlertTitle>
-  //         Detail : {error.message}
-  //       </Alert>
-  //     )
-  //   }
+  if (status === 'error') {
+    return (
+      <Alert severity='error'>
+        <AlertTitle>Une erreur est survenue</AlertTitle>
+        Detail : {error.message}
+      </Alert>
+    )
+  }
 
   return (
     <div className='row'>
@@ -57,12 +59,16 @@ const Row = ({
       <div className='row__posters'>
         {data?.data.results.map(movie => {
           return (
-            <div
+            <Link
               key={movie.id}
+              to={`/${type}/${movie.id}`}
               className={`row__poster row__posterLarge ${watermarkClass}`}
             >
-              <img src={buildImagePath(movie)} alt={movie.name} />
-            </div>
+              <img
+                src={buildImagePath(movie)}
+                alt={movie.name || movie.title}
+              />
+            </Link>
           )
         })}
       </div>
