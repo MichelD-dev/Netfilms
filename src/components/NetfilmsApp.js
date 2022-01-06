@@ -3,13 +3,13 @@ import { NavBar } from './NavBar'
 import { Row } from './Row'
 import { Footer } from './Footer'
 import { Header } from './Header'
-import { getRandomType, getRandomId } from '../utils/helper'
-import { clientApi } from '../utils/clientApi'
+import { getRandomType, getRandomId } from 'utils/helper'
+import { clientApi } from 'utils/clientApi'
 import { makeStyles } from '@mui/styles'
 import { Alert, AlertTitle } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useFetchData } from '../utils/hooks'
-import { TYPE_MOVIE, TYPE_TV } from '../config'
+import { useFetchData } from 'utils/hooks'
+import { TYPE_MOVIE, TYPE_TV } from 'config'
 import './Netfilm.css'
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const NetfilmsApp = () => {
+const NetfilmsApp = ({ logout }) => {
   const classes = useStyles()
   const { data: headerMovie, error, status, execute } = useFetchData()
   const [type] = useState(getRandomType())
@@ -36,9 +36,10 @@ const NetfilmsApp = () => {
   if (status === 'error') {
     throw new Error(error.message)
   }
+
   return (
     <>
-      <NavBar />
+      <NavBar logout={logout} />
       <Header movie={headerMovie?.data} type={type} />
       <Row
         wideImage
@@ -86,10 +87,10 @@ const NetfilmsApp = () => {
 
       {status === 'fetching' ? (
         <div className={classes.progress}>
-          <CircularProgress />{' '}
+          <CircularProgress />
         </div>
       ) : null}
-      <Footer color='secondary' si />
+      <Footer />
     </>
   )
 }

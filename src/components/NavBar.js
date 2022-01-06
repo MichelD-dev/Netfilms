@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
+import { AppBar, Toolbar } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { Link } from 'react-router-dom'
 
-const NavBar = () => {
+const NavBar = ({ logout }) => {
   const [appBarStyle, setAppBarStyle] = useState({
     background: 'transparent',
     boxShadow: 'none',
@@ -66,6 +65,7 @@ const NavBar = () => {
           className='nav__avatar'
           src='/images/netflix-avatar.png'
           alt=''
+          onClick={logout}
         />
       </Toolbar>
     </AppBar>

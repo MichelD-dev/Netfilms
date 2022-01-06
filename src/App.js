@@ -1,18 +1,17 @@
-import { NetfilmsApp } from 'components/NetfilmsApp'
-import { ThemeProvider } from '@mui/styles'
-import { createTheme } from '@mui/material/styles'
-import { ErrorBoundary } from 'react-error-boundary'
-import ErrorFallback from 'components/ErrorFallback'
-import Error404 from './components/Error404'
-import { Movies } from './components/Movies'
-import { Series } from './components/Series'
-import { News } from './components/News'
-import { SelectById } from 'components/SelectById'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import './mocks'
+import * as authNetfilms from './utils/authProvider'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { AuthApp } from 'AuthApp'
+import { UnauthApp } from 'UnauthApp'
+import { useFetchData } from 'utils/hooks'
+import { clientAuth } from './utils/clientApi'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: '#E50914',
     },
@@ -23,27 +22,53 @@ const theme = createTheme({
 })
 
 function App() {
+  const [authError, setAuthError] = useState(null)
+  const { data: authUser, setData, status, execute } = useFetchData()
+
+  const login = data =>
+    authNetfilms
+      .login(data)
+      .then(user => setData(user))
+      .catch(err => setAuthError(err))
+
+  const register = data =>
+    authNetfilms
+      .register(data)
+      .then(user => setData(user))
+      .catch(err => setAuthError(err))
+
+  const logout = () => {
+    authNetfilms.logout()
+    setData(null)
+  }
+
+  async function getUserByToken() {
+    let user = null
+    const token = await authNetfilms.getToken() //est récupéré depuis le localstorage
+    if (token) {
+      const data = await clientAuth('me', { token }) // /me: API d'authentification
+      user = data.data.user
+    }
+    return user
+  }
+
+  useEffect(() => {
+    // getUserByToken().then(user => setData(user))
+    execute(getUserByToken()) //même résultat que la ligne au dessus !
+  }, [execute])
+
   return (
-    <Router>
-      <ThemeProvider theme={theme}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Routes>
-            <Route path='/' exact strict element={<NetfilmsApp />} />
-            <Route path='/tv/:tvId' exact strict element={<SelectById />} />
-            <Route
-              path='/movie/:movieId'
-              exact
-              strict
-              element={<SelectById />}
-            />
-            <Route path='/series' exact strict element={<Series />} />
-            <Route path='/movies' exact strict element={<Movies />} />
-            <Route path='/news' exact strict element={<News />} />
-            <Route path='/*' exact strict element={<Error404 />} />
-          </Routes>
-        </ErrorBoundary>
-      </ThemeProvider>
-    </Router>
+    <ThemeProvider theme={theme}>
+      {status === 'fetching' ? (
+        <Backdrop open={true}>
+          <CircularProgress color='primary' />
+        </Backdrop>
+      ) : authUser ? (
+        <AuthApp logout={logout} />
+      ) : (
+        <UnauthApp login={login} register={register} error={authError} />
+      )}
+    </ThemeProvider>
   )
 }
 

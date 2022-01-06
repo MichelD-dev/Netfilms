@@ -41,6 +41,10 @@ const SelectById = () => {
   useEffect(() => {
     setType(type)
     setId(type === TYPE_TV ? tvId : movieId)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }, [movieId, tvId, type])
 
   if (status === 'error') {
