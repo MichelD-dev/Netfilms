@@ -12,7 +12,6 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useFetchData } from 'utils/hooks'
 
 const useStyles = makeStyles(theme => ({
   root: {
