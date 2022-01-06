@@ -13,7 +13,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           color: '#fff',
         }}
       >
-        <h1 style={{ fontSize: '2.5em' }}>Vous cherchez votre chemin ?</h1>
+        <h1 style={{ fontSize: '2.5em' }}>Vous cherchez votre chemin?</h1>
         <pre style={{ color: 'red', fontSize: '1em' }}>
           Erreur : {error.message}
         </pre>

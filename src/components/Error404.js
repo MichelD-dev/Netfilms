@@ -1,3 +1,4 @@
+import { AppBar, Toolbar } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { NavBar } from './NavBar'
 
@@ -17,24 +18,43 @@ function Error404() {
       }}
     >
       <NavBar />
+      <AppBar style={{ background: '#111' }}>
+        <Toolbar>
+          <img className='nav__logo' src='/images/netflix-logo.png' alt='' />
+        </Toolbar>
+      </AppBar>
       <div
-        role='alert'
         style={{
-          height: '100%',
-          textAlign: 'center',
-          padding: '100px 300px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           color: '#fff',
+          height: '100%',
         }}
       >
-        <h1 style={{ fontSize: '2.5em' }}>Vous cherchez votre chemin?</h1>
-        <pre style={{ color: 'red', fontSize: '1em' }}>Erreur 404</pre>
-        <div className='banner__buttons'>
-          <Link to='/'>
-            <button className='banner__button banner__buttonplay'>
-              Accueil
-            </button>
-          </Link>
+        <div
+          role='alert'
+          style={{
+            textAlign: 'center',
+            paddingTop: '200px',
+          }}
+        >
+          <h1 style={{ fontSize: '2.5em' }}>Vous cherchez votre chemin?</h1>
+          <p style={{ margin: '30px' }}>
+            Désolé, nous n'avons pas trouvé cette page. Un vaste choix de
+            programmes vous attend sur la page d'accueil.
+          </p>
+          <div className='banner__buttons'>
+            <Link to='/'>
+              <button className='banner__button banner__buttonplay'>
+                Accueil Netfilms
+              </button>
+            </Link>
+          </div>
         </div>
+        <p style={{ margin: 'auto' }}>
+          Code d'erreur: <strong>404</strong>
+        </p>
       </div>
     </div>
   )
