@@ -64,7 +64,10 @@ const FormLogin = ({ create = false, login, register, logout }) => {
             {label}
           </Button>
           <small>* Consultez nos CGV</small>
-          <small>This page is protected by Google reCAPTCHA</small>
+          <small>
+            This page is protected by Google reCAPTCHA to ensure you're not a
+            bot. <span style={{ color: 'blue' }}>Learn more.</span>
+          </small>
         </>
       ) : (
         <>

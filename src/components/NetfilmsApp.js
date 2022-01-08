@@ -28,10 +28,15 @@ const NetfilmsApp = ({ logout }) => {
   const { data: headerMovie, error, status, execute } = useFetchData()
   const [type] = useState(getRandomType())
   const defaultMovieId = getRandomId(type)
+  const [queried, setQueried] = useState(true)
 
   useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(`${type}/${defaultMovieId}`))
-  }, [defaultMovieId, execute, type])
+    setQueried(false)
+  }, [defaultMovieId, execute, queried, type])
 
   if (status === 'error') {
     throw new Error(error.message)

@@ -25,4 +25,25 @@ const clientAuth = (endpoint, { token, data }) => {
     : axios.get(`${AUTH_URL}/${endpoint}`, config)
 }
 
-export { clientApi, clientAuth }
+const clientNetfilms = async (endpoint, { token, data, method = 'GET' }) => {
+  const config = {
+    method,
+    url: `${AUTH_URL}/${endpoint}`,
+    data: JSON.stringify(data),
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
+    },
+  }
+  return axios(config)
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      if (error.response) {
+        return Promise.reject(error.response.data)
+      }
+    })
+}
+
+export { clientApi, clientAuth, clientNetfilms }

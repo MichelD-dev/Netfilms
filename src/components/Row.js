@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { TYPE_MOVIE, imagePath400 } from '../config'
 import { useFetchData } from '../utils/hooks'
 import { clientApi } from '../utils/clientApi'
@@ -15,6 +15,7 @@ const Row = ({
   watermark = false,
 }) => {
   const { data, error, status, execute } = useFetchData()
+  const [queried, setQueried] = useState(true)
 
   const endpointLatest = `${type}/latest`
   const endpointPopular = `${type}/popular`
@@ -30,8 +31,12 @@ const Row = ({
     (filter === 'trending' && endpointTrending)
 
   useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(`${endpoint}`))
-  }, [endpoint, execute])
+    setQueried(false)
+  }, [endpoint, execute, queried])
 
   const buildImagePath = data => {
     const image = wideImage ? data?.backdrop_path : data?.poster_path
@@ -58,7 +63,6 @@ const Row = ({
       <h2>{title}</h2>
       <div className='row__posters'>
         {data?.data.results.map(movie => {
-          console.log(movie)
           return (
             <Link
               key={movie.id}

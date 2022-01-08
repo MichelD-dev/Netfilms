@@ -27,11 +27,15 @@ const News = () => {
   const { data: headerMovie, error, status, execute } = useFetchData()
   const [type] = useState(getRandomType())
   const defaultMovieId = getRandomId(type)
+  const [queried, setQueried] = useState(true)
 
   useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(`${type}/${defaultMovieId}`))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [execute, type])
+    setQueried(false)
+  }, [execute, defaultMovieId, type, queried])
 
   if (status === 'error') {
     throw new Error(error.message)

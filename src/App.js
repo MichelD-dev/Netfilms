@@ -23,23 +23,31 @@ const theme = createTheme({
 
 function App() {
   const [authError, setAuthError] = useState(null)
-  const { data: authUser, setData, status, execute } = useFetchData()
+  const {
+    data: authUser,
+    setData: setAuthUser,
+    status,
+    execute,
+  } = useFetchData()
 
-  const login = data =>
+  const login = data => {
     authNetfilms
       .login(data)
-      .then(user => setData(user))
+      .then(user => {
+        setAuthUser(user)
+      })
       .catch(err => setAuthError(err))
+  }
 
   const register = data =>
     authNetfilms
       .register(data)
-      .then(user => setData(user))
+      .then(user => setAuthUser(user))
       .catch(err => setAuthError(err))
 
   const logout = () => {
     authNetfilms.logout()
-    setData(null)
+    setAuthUser(null)
   }
 
   async function getUserByToken() {
@@ -53,8 +61,7 @@ function App() {
   }
 
   useEffect(() => {
-    // getUserByToken().then(user => setData(user))
-    execute(getUserByToken()) //même résultat que la ligne au dessus !
+    execute(getUserByToken())
   }, [execute])
 
   return (

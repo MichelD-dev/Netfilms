@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { Footer } from './Footer'
 import { getRandomId } from '../utils/helper'
 import { clientApi } from '../utils/clientApi'
@@ -27,11 +27,15 @@ const Movies = () => {
   const { data: headerMovie, error, status, execute } = useFetchData()
   const type = TYPE_MOVIE
   const defaultMovieId = getRandomId(type)
+  const [queried, setQueried] = useState(true)
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(`${type}/${defaultMovieId}`))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [execute, type])
+    setQueried(false)
+  }, [execute, defaultMovieId, type, queried])
 
   if (status === 'error') {
     throw new Error(error.message)

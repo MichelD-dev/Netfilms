@@ -3,5 +3,5 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'test') {
   //module.exports = require('./server')
 } else {
-  //module.exports = require('./server')
+  module.exports = require('./server')
 }

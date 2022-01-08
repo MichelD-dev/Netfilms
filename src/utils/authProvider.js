@@ -2,24 +2,23 @@
  -- Ne pas modifier --
  Exemple d'utilitaire permettant de se connecter au backend
 */
+import axios from 'axios'
 import { AUTH_URL, localStorageTokenKey } from '../config'
 
 async function clientApiNetfilms(endpoint, data) {
   const config = {
-    method: 'POST',
-    body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },
   }
-
-  return fetch(`${AUTH_URL}/${endpoint}`, config).then(async response => {
-    const data = await response.json()
-    if (response.ok) {
-      return data
-    } else {
-      console.log('clientApiNetfilms ko', data)
-      return Promise.reject(data)
-    }
-  })
+  return axios
+    .post(`${AUTH_URL}/${endpoint}`, JSON.stringify(data), config)
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      if (error.response) {
+        return Promise.reject(error.response.data)
+      }
+    })
 }
 
 async function getToken() {
@@ -32,6 +31,7 @@ function storeToken({ user }) {
 }
 
 async function login({ username, password }) {
+  console.log(username, password)
   return clientApiNetfilms('login', { username, password }).then(storeToken)
 }
 
@@ -39,7 +39,7 @@ async function register({ username, password }) {
   return clientApiNetfilms('register', { username, password }).then(storeToken)
 }
 
-async function logout() {
+function logout() {
   window.localStorage.removeItem(localStorageTokenKey)
 }
 

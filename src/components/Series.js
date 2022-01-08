@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { NavBar } from './NavBar'
 import { Row } from './Row'
 import { Footer } from './Footer'
@@ -27,11 +27,15 @@ const Series = () => {
   const { data: headerMovie, error, status, execute } = useFetchData()
   const type = TYPE_TV
   const defaultMovieId = getRandomId(type)
+  const [queried, setQueried] = useState(true)
 
   useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(`${type}/${defaultMovieId}`))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [execute, type])
+    setQueried(false)
+  }, [execute, defaultMovieId, type, queried])
 
   if (status === 'error') {
     throw new Error(error.message)

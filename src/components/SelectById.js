@@ -27,6 +27,7 @@ const SelectById = () => {
   const { data: headerMovie, error, status, execute } = useFetchData()
   const { tvId, movieId } = useParams()
   const { pathname } = useLocation()
+  const [queried, setQueried] = useState(true)
 
   const [type, setType] = useState(
     pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
@@ -35,12 +36,17 @@ const SelectById = () => {
   const [id, setId] = useState(type === TYPE_TV ? tvId : movieId)
 
   useEffect(() => {
+    if (!queried) {
+      return
+    }
     execute(clientApi(pathname))
-  }, [execute, pathname])
+    setQueried(false)
+  }, [execute, pathname, queried])
 
   useEffect(() => {
     setType(type)
     setId(type === TYPE_TV ? tvId : movieId)
+    setQueried(true)
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
