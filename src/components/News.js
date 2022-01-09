@@ -78,7 +78,7 @@ const News = () => {
         type={TYPE_MOVIE}
         filter='genre'
         param='53'
-        title='Les meilleurs Thriller'
+        title='Les meilleurs Thrillers'
         watermark={false}
         wideImage={false}
       />

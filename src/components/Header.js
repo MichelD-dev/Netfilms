@@ -12,11 +12,11 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-const Header = ({ movie, type = TYPE_MOVIE }) => {
+const Header = ({ movie, type = TYPE_MOVIE, reload, noBookmarks }) => {
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
   const { data, error, status, execute } = useFetchData()
-  const title = type === TYPE_MOVIE ? movie?.title : movie?.name
+  const title = movie?.title ?? movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
     backgroundImage: `url('${imageUrl}')`,
@@ -42,9 +42,10 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
   const isInList = data?.bookmark[
     type === TYPE_MOVIE ? 'movies' : 'series'
   ]?.includes(movie?.id)
-
-  const handleAddToListClick = async () => {
+  console.log(isInList)
+  const handleAddToBookmarks = async () => {
     setBookmarkCalled(true)
+    reload && reload()
     const token = await authNetfilms.getToken()
     execute(
       clientNetfilms(`bookmark/${type}`, {
@@ -55,8 +56,9 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
     )
   }
 
-  const handleDeleteToListClick = async () => {
-    setBookmarkCalled(true)
+  const handleDeleteFromBookmarks = async () => {
+    setBookmarkCalled(val => !val)
+    reload && reload()
     const token = await authNetfilms.getToken()
     execute(
       clientNetfilms(`bookmark/${type}`, {
@@ -70,7 +72,7 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
   if (!movie) {
     return <HeaderSkeleton />
   }
-  //FIXME affichage title
+
   return (
     <header style={banner}>
       <div className='banner__contents'>
@@ -79,14 +81,14 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
           <button className='banner__button banner__buttonplay'>Lecture</button>
           {!isInList ? (
             <button
-              onClick={handleAddToListClick}
+              onClick={handleAddToBookmarks}
               className='banner__button banner__buttonInfo'
             >
               Ajouter à ma liste
             </button>
           ) : (
             <button
-              onClick={handleDeleteToListClick}
+              onClick={handleDeleteFromBookmarks}
               className='banner__button banner__buttonInfo'
             >
               <DeleteIcon
@@ -101,6 +103,7 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
         <h1 className='synopsis'>{movie?.overview ?? '...'}</h1>
       </div>
       <div className='banner--fadeBottom'></div>
+
       {bookmarkCalled && status === 'done' && (
         <Snackbar
           open={bookmarkMessageOpen}
@@ -112,6 +115,7 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
           </Alert>
         </Snackbar>
       )}
+
       {bookmarkCalled && status === 'error' && (
         <Snackbar
           open={bookmarkMessageOpen}
@@ -120,6 +124,18 @@ const Header = ({ movie, type = TYPE_MOVIE }) => {
         >
           <Alert severity='error' sx={{ width: '100%' }}>
             Problème lors de l'ajout : {error.message}.
+          </Alert>
+        </Snackbar>
+      )}
+
+      {noBookmarks && !bookmarkCalled && (
+        <Snackbar
+          open={bookmarkMessageOpen}
+          autoHideDuration={4000}
+          onClose={() => setBookmarkMessageOpen(false)}
+        >
+          <Alert severity='info' sx={{ width: '100%' }}>
+            Vous n'avez pas de favoris enregistrés.
           </Alert>
         </Snackbar>
       )}

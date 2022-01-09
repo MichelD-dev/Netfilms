@@ -20,9 +20,6 @@ const HeaderSkeleton = () => {
         </h1>
         <div className='banner__buttons'>
           <button className='banner__button banner__buttonplay'>Lecture</button>
-          <button className='banner__button banner__buttonInfo'>
-            Plus d'infos
-          </button>
         </div>
         <h1 className='synopsis'>
           <Skeleton animation='wave' />

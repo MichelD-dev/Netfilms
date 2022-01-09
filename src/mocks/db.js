@@ -166,7 +166,7 @@ async function checkBookMark(id, uid, type = TYPE_TV) {
   if (type === TYPE_TV) {
     const serie = bookmark.series.find(item => item === id)
     if (serie > 0) {
-      const error = new Error('Serie déjà dans la liste')
+      const error = new Error('Série déjà dans la liste')
       error.status = 400
       throw error
     }

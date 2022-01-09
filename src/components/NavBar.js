@@ -27,36 +27,42 @@ const NavBar = ({ logout }) => {
     window.addEventListener('scroll', onScroll)
 
     return () => window.removeEventListener('scroll', onScroll)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const margin10 = { margin: 10 }
+  const margin = { margin: '10px 20px' }
 
   return (
     <AppBar style={appBarStyle}>
       <Toolbar>
-        <img className='nav__logo' src='/images/netflix-logo.png' alt='' />
+        <img
+          className='nav__logo'
+          src='/images/netflix-logo.png'
+          alt='Logo Netflix'
+          style={margin}
+        />
         <Link to='/'>
-          <Typography style={margin10} variant='h6'>
+          <Typography style={margin} variant='h6'>
             Accueil
           </Typography>
         </Link>
         <Link to='/series'>
-          <Typography style={margin10} variant='h6'>
+          <Typography style={margin} variant='h6'>
             Séries
           </Typography>
         </Link>
         <Link to='/movies'>
-          <Typography style={margin10} variant='h6'>
+          <Typography style={margin} variant='h6'>
             Films
           </Typography>
         </Link>
         <Link to='/news'>
-          <Typography style={margin10} variant='h6'>
+          <Typography style={margin} variant='h6'>
             Nouveautés les plus regardées
           </Typography>
         </Link>
         <Link to='/list'>
-          <Typography style={margin10} variant='h6'>
+          <Typography style={margin} variant='h6'>
             Ma liste
           </Typography>
         </Link>
