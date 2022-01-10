@@ -105,11 +105,9 @@ function loadAllUsersBookmarks() {
 
 async function saveUserBookmark(savedList) {
   let all = loadAllUsersBookmarks()
-  console.log('saveUserBookmark', all)
   all = all.filter(item => item.uid !== savedList.uid)
   all.push(savedList)
 
-  console.log('saveUserBookmark2', all)
   saveAllUsersBookmarks(all)
 }
 
@@ -152,10 +150,8 @@ async function deleteToBookmark(id, uid, type = TYPE_TV) {
   if (type === TYPE_TV) {
     const series = bookmark.series.filter(item => item !== id)
     bookmark.series = series
-    console.log('deleteToBookmark', series)
   } else {
     const movies = bookmark.movies.filter(item => item !== id)
-    console.log('deleteToBookmark movies', movies)
     bookmark.movies = movies
   }
   saveUserBookmark(bookmark)
@@ -166,14 +162,14 @@ async function checkBookMark(id, uid, type = TYPE_TV) {
   if (type === TYPE_TV) {
     const serie = bookmark.series.find(item => item === id)
     if (serie > 0) {
-      const error = new Error('Série déjà dans la liste')
+      const error = new Error('Série déjà dans la liste.')
       error.status = 400
       throw error
     }
   } else {
     const movie = bookmark.movies.find(item => item === id)
     if (movie) {
-      const error = new Error('Film déjà dans la liste')
+      const error = new Error('Film déjà dans la liste.')
       error.status = 400
       throw error
     }

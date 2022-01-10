@@ -107,6 +107,11 @@ async function getUser(req) {
     throw error
   }
   const user = await db.loadUserById(userId, true)
+  if (!user) {
+    const error = new Error('Utilisateur non trouvé avec ce Token')
+    error.status = 401
+    throw error
+  }
   return user
 }
 

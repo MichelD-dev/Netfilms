@@ -8,6 +8,9 @@ import { useFetchData } from 'utils/hooks'
 import { clientAuth } from './utils/clientApi'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 const theme = createTheme({
   palette: {
@@ -20,6 +23,16 @@ const theme = createTheme({
     },
   },
 })
+
+async function getUserByToken() {
+  let user = null
+  const token = await authNetfilms.getToken() //est récupéré depuis le localstorage
+  if (token) {
+    const data = await clientAuth('me', { token }) // /me: API d'authentification
+    user = data.data.user
+  }
+  return user
+}
 
 function App() {
   const [authError, setAuthError] = useState(null)
@@ -50,32 +63,24 @@ function App() {
     setAuthUser(null)
   }
 
-  async function getUserByToken() {
-    let user = null
-    const token = await authNetfilms.getToken() //est récupéré depuis le localstorage
-    if (token) {
-      const data = await clientAuth('me', { token }) // /me: API d'authentification
-      user = data.data.user
-    }
-    return user
-  }
-
   useEffect(() => {
     execute(getUserByToken())
   }, [execute])
 
   return (
-    <ThemeProvider theme={theme}>
-      {status === 'fetching' ? (
-        <Backdrop open={true}>
-          <CircularProgress color='primary' />
-        </Backdrop>
-      ) : authUser ? (
-        <AuthApp logout={logout} />
-      ) : (
-        <UnauthApp login={login} register={register} error={authError} />
-      )}
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        {status === 'fetching' ? (
+          <Backdrop open={true}>
+            <CircularProgress color='primary' />
+          </Backdrop>
+        ) : authUser ? (
+          <AuthApp logout={logout} />
+        ) : (
+          <UnauthApp login={login} register={register} error={authError} />
+        )}
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
 

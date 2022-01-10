@@ -1,7 +1,7 @@
-import { useEffect, useState, forwardRef } from 'react'
+import { useState, forwardRef } from 'react'
 import { HeaderSkeleton } from 'skeletons/HeaderSkeleton'
 import { imagePathOriginal, TYPE_MOVIE } from '../config'
-import { useFetchData } from 'utils/hooks'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { clientNetfilms } from 'utils/clientApi'
 import * as authNetfilms from '../utils/authProvider'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -12,10 +12,11 @@ const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-const Header = ({ movie, type = TYPE_MOVIE, reload, noBookmarks }) => {
+const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
+  const queryClient = useQueryClient()
+  const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
-  const { data, error, status, execute } = useFetchData()
   const title = movie?.title ?? movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
@@ -26,47 +27,67 @@ const Header = ({ movie, type = TYPE_MOVIE, reload, noBookmarks }) => {
     objectFit: 'contain',
     height: '448px',
   }
+  const { data } = useQuery('bookmark', async () => {
+    const token = await authNetfilms.getToken()
+    return clientNetfilms(`bookmark`, { token })
+  })
 
-  useEffect(() => {
-    setBookmarkMessageOpen(true)
-  }, [status])
-
-  useEffect(() => {
-    const getBookmarks = async () => {
+  const addMutation = useMutation(
+    async ({ type, id }) => {
       const token = await authNetfilms.getToken()
-      execute(clientNetfilms('bookmark', { token }))
+      return clientNetfilms(`bookmark/${type}`, {
+        token,
+        data: { id },
+        method: 'POST',
+      })
+    },
+    {
+      onSuccess() {
+        queryClient.invalidateQueries('bookmark')
+        setBookmarkMessageOpen(true)
+        setMutateBookmarkError()
+      },
+      onError(error) {
+        setBookmarkMessageOpen(true)
+        setMutateBookmarkError(error)
+      },
     }
-    getBookmarks()
-  }, [execute])
+  )
+
+  const deleteMutation = useMutation(
+    async ({ type, id }) => {
+      const token = await authNetfilms.getToken()
+      return clientNetfilms(`bookmark/${type}`, {
+        token,
+        data: { id },
+        method: 'DELETE',
+      })
+    },
+    {
+      onSuccess() {
+        queryClient.invalidateQueries('bookmark')
+        setBookmarkMessageOpen(true)
+        setMutateBookmarkError('')
+      },
+      onError(error) {
+        setBookmarkMessageOpen(true)
+        setMutateBookmarkError(error)
+      },
+    }
+  )
 
   const isInList = data?.bookmark[
     type === TYPE_MOVIE ? 'movies' : 'series'
   ]?.includes(movie?.id)
-  console.log(isInList)
-  const handleAddToBookmarks = async () => {
-    setBookmarkCalled(true)
-    reload && reload()
-    const token = await authNetfilms.getToken()
-    execute(
-      clientNetfilms(`bookmark/${type}`, {
-        token,
-        data: { id: movie.id },
-        method: 'POST',
-      })
-    )
+
+  const handleAddToBookmarks = () => {
+    setBookmarkCalled()
+    addMutation.mutate({ type, id: movie.id })
   }
 
-  const handleDeleteFromBookmarks = async () => {
-    setBookmarkCalled(val => !val)
-    reload && reload()
-    const token = await authNetfilms.getToken()
-    execute(
-      clientNetfilms(`bookmark/${type}`, {
-        token,
-        data: { id: movie.id },
-        method: 'DELETE',
-      })
-    )
+  const handleDeleteFromBookmarks = () => {
+    setBookmarkCalled()
+    deleteMutation.mutate({ type, id: movie.id })
   }
 
   if (!movie) {
@@ -104,7 +125,7 @@ const Header = ({ movie, type = TYPE_MOVIE, reload, noBookmarks }) => {
       </div>
       <div className='banner--fadeBottom'></div>
 
-      {bookmarkCalled && status === 'done' && (
+      {!mutateBookmarkError && (
         <Snackbar
           open={bookmarkMessageOpen}
           autoHideDuration={4000}
@@ -116,14 +137,14 @@ const Header = ({ movie, type = TYPE_MOVIE, reload, noBookmarks }) => {
         </Snackbar>
       )}
 
-      {bookmarkCalled && status === 'error' && (
+      {mutateBookmarkError && (
         <Snackbar
           open={bookmarkMessageOpen}
           autoHideDuration={4000}
           onClose={() => setBookmarkMessageOpen(false)}
         >
           <Alert severity='error' sx={{ width: '100%' }}>
-            Problème lors de l'ajout : {error.message}.
+            Problème lors de l'ajout : {mutateBookmarkError.message}.
           </Alert>
         </Snackbar>
       )}

@@ -31,7 +31,6 @@ function storeToken({ user }) {
 }
 
 async function login({ username, password }) {
-  console.log(username, password)
   return clientApiNetfilms('login', { username, password }).then(storeToken)
 }
 

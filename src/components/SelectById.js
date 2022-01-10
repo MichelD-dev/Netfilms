@@ -4,58 +4,34 @@ import { Row } from './Row'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { clientApi } from '../utils/clientApi'
-import { makeStyles } from '@mui/styles'
-import { Alert, AlertTitle } from '@mui/material'
-import { useFetchData } from '../utils/hooks'
+import { useQuery } from 'react-query'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
 import { useParams, useLocation } from 'react-router-dom'
 import './Netfilm.css'
 
-const useStyles = makeStyles(theme => ({
-  alert: {
-    width: '50%',
-    margin: 'auto',
-    marginBotton: '50px',
-  },
-  progress: {
-    marginLeft: '30px',
-  },
-}))
-
 const SelectById = () => {
-  const classes = useStyles()
-  const { data: headerMovie, error, status, execute } = useFetchData()
   const { tvId, movieId } = useParams()
   const { pathname } = useLocation()
-  const [queried, setQueried] = useState(true)
-
   const [type, setType] = useState(
     pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
   )
 
   const [id, setId] = useState(type === TYPE_TV ? tvId : movieId)
-
-  useEffect(() => {
-    if (!queried) {
-      return
-    }
-    execute(clientApi(pathname))
-    setQueried(false)
-  }, [execute, pathname, queried])
+  const {
+    data: headerMovie,
+    error,
+    status,
+  } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))
 
   useEffect(() => {
     setType(type)
     setId(type === TYPE_TV ? tvId : movieId)
-    setQueried(true)
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     })
   }, [movieId, tvId, type])
 
-  if (status === 'error') {
-    throw new Error(error.message)
-  }
   return (
     <div>
       <NavBar />
@@ -94,16 +70,6 @@ const SelectById = () => {
         param='53'
         title='Films: les meilleurs thrillers'
       />
-
-      {status === 'error' ? (
-        <div className={classes.alert}>
-          <Alert severity='error'>
-            <AlertTitle>Une erreur est survenue</AlertTitle>
-            Detail : {error.message}
-          </Alert>
-        </div>
-      ) : null}
-
       <Footer />
     </div>
   )

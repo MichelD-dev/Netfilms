@@ -5,7 +5,7 @@ import Error404 from './components/Error404'
 import { Movies } from './components/Movies'
 import { Series } from './components/Series'
 import { News } from './components/News'
-import { Bookmarks } from './components/Bookmarks'
+import { Bookmarks } from './components/Bookmarks' //FIXME
 import { SelectById } from 'components/SelectById'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 

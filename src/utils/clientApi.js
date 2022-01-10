@@ -5,12 +5,20 @@ import { apiKey, lang, API_URL, AUTH_URL } from '../config'
 
 const clientApi = async endpoint => {
   const page = 1
-
   // await sleep(2000)
-
   const startChar = endpoint.includes('?') ? `&` : `?`
   const keyLang = `${startChar}api_key=${apiKey}&language=${lang}&page=${page}`
-  return axios.get(`${API_URL}/${endpoint}${keyLang}`)
+  return axios.get(`${API_URL}/${endpoint}${keyLang}`).catch(error => {
+    if (error.response) {
+      const err = {
+        ...error.response,
+        message: error.response?.data?.status_message,
+      }
+      return Promise.reject(err)
+    } else {
+      return Promise.reject(error)
+    }
+  })
 }
 
 const clientAuth = (endpoint, { token, data }) => {
@@ -42,6 +50,8 @@ const clientNetfilms = async (endpoint, { token, data, method = 'GET' }) => {
     .catch(error => {
       if (error.response) {
         return Promise.reject(error.response.data)
+      } else {
+        return Promise.reject(error)
       }
     })
 }

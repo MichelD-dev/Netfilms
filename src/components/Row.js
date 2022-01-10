@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { TYPE_MOVIE, imagePath400 } from '../config'
-import { useFetchData } from '../utils/hooks'
+import { useQuery } from 'react-query'
 import { clientApi } from '../utils/clientApi'
 import { Alert, AlertTitle } from '@mui/material'
 import { RowSkeleton } from 'skeletons/RowSkeleton'
@@ -14,9 +13,6 @@ const Row = ({
   filter = 'populaire',
   watermark = false,
 }) => {
-  const { data, error, status, execute } = useFetchData()
-  const [queried, setQueried] = useState(true)
-
   const endpointLatest = `${type}/latest`
   const endpointPopular = `${type}/popular`
   const endpointTopRated = `${type}/top_rated`
@@ -30,13 +26,7 @@ const Row = ({
     (filter === 'genre' && endpointGenre) ||
     (filter === 'trending' && endpointTrending)
 
-  useEffect(() => {
-    if (!queried) {
-      return
-    }
-    execute(clientApi(`${endpoint}`))
-    setQueried(false)
-  }, [endpoint, execute, queried])
+  const { data, error, status } = useQuery(endpoint, () => clientApi(endpoint))
 
   const buildImagePath = data => {
     const image = wideImage ? data?.backdrop_path : data?.poster_path
@@ -45,7 +35,7 @@ const Row = ({
 
   const watermarkClass = watermark ? 'watermarked' : ''
 
-  if (status === 'fetching' || status === 'idle') {
+  if (status === 'loading' || status === 'idle') {
     return <RowSkeleton title={title} wideImage={wideImage} />
   }
 
