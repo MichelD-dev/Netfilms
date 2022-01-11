@@ -1,24 +1,17 @@
-import { NavBar } from './NavBar'
-import { Row } from './Row'
-import { Footer } from './Footer'
-import { Header } from './Header'
+import { NavBar } from '../components/NavBar'
+import { Row } from '../components/Row'
+import { Footer } from '../components/Footer'
+import { Header } from '../components/Header'
 import { getRandomType, getRandomId } from 'utils/helper'
-import { clientApi } from 'utils/clientApi'
-import { useQuery } from 'react-query'
 import { TYPE_MOVIE, TYPE_TV } from 'config'
 import './Netfilm.css'
+import { useMovie } from 'utils/hooks'
 
 const type = getRandomType()
 const defaultMovieId = getRandomId(type)
 
 const NetfilmsApp = ({ logout }) => {
-  const {
-    data: headerMovie,
-    error,
-    status,
-  } = useQuery(`${type}/${defaultMovieId}`, () =>
-    clientApi(`${type}/${defaultMovieId}`)
-  )
+  const headerMovie = useMovie(type, defaultMovieId)
 
   return (
     <>

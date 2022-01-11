@@ -1,21 +1,16 @@
 import { useState } from 'react'
-import { NavBar } from './NavBar'
-import { Header } from './Header'
+import { NavBar } from '../components/NavBar'
+import { Header } from '../components/Header'
 import { getRandomId } from '../utils/helper'
-import { useQuery } from 'react-query'
-import { clientNetfilms, clientApi } from '../utils/clientApi'
-import * as authNetfilms from '../utils/authProvider'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
-import Card from './Card'
+import Card from '../components/Card'
+import { useBookmark, useMovie } from 'utils/hooks'
 
 const RANDOM_MOVIE = getRandomId(TYPE_MOVIE)
 
 const Bookmarks = ({ logout }) => {
+  const data = useBookmark()
   const [header, setHeader] = useState({ type: null, movie: null })
-  const { data, error, status } = useQuery('bookmark', async () => {
-    const token = await authNetfilms.getToken()
-    return clientNetfilms('bookmark', { token })
-  })
 
   const id =
     header.id ??
@@ -29,9 +24,7 @@ const Bookmarks = ({ logout }) => {
     (data?.bookmark?.series?.length !== 0 && TYPE_TV) ||
     TYPE_MOVIE
 
-  const { data: headerMovie } = useQuery(`${type}/${id}`, () =>
-    clientApi(`${type}/${id}`)
-  )
+  const headerMovie = useMovie(TYPE_MOVIE, id)
 
   return (
     <>

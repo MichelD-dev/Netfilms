@@ -1,12 +1,12 @@
-import { NetfilmsApp } from 'components/NetfilmsApp'
+import { NetfilmsApp } from 'pages/NetfilmsApp'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallback from 'components/ErrorFallback'
 import Error404 from './components/Error404'
-import { Movies } from './components/Movies'
-import { Series } from './components/Series'
-import { News } from './components/News'
-import { Bookmarks } from './components/Bookmarks' //FIXME
-import { SelectById } from 'components/SelectById'
+import { Movies } from './pages/Movies'
+import { Series } from './pages/Series'
+import { News } from './pages/News'
+import { Bookmarks } from './pages/Bookmarks' //FIXME
+import { SelectById } from 'pages/SelectById'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 function AuthApp({ logout }) {

@@ -1,4 +1,4 @@
-import LoginRegister from 'components/LoginRegister'
+import LoginRegister from 'pages/LoginRegister'
 
 function UnauthApp({ login, register, error }) {
   const imageUrl = '/images/posters.jpg'

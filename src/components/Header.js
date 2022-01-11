@@ -1,12 +1,11 @@
 import { useState, forwardRef } from 'react'
 import { HeaderSkeleton } from 'skeletons/HeaderSkeleton'
 import { imagePathOriginal, TYPE_MOVIE } from '../config'
-import { useQuery, useQueryClient, useMutation } from 'react-query'
-import { clientNetfilms } from 'utils/clientApi'
-import * as authNetfilms from '../utils/authProvider'
+import { useQueryClient } from 'react-query'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
+import { useAddBookmark, useBookmark, useDeleteBookmark } from 'utils/hooks'
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
@@ -27,66 +26,41 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
     objectFit: 'contain',
     height: '448px',
   }
-  const { data } = useQuery('bookmark', async () => {
-    const token = await authNetfilms.getToken()
-    return clientNetfilms(`bookmark`, { token })
+  const data = useBookmark()
+
+  const addMutation = useAddBookmark({
+    onSuccess() {
+      setBookmarkMessageOpen(true)
+      setMutateBookmarkError()
+    },
+    onError(error) {
+      setBookmarkMessageOpen(true)
+      setMutateBookmarkError(error)
+    },
   })
 
-  const addMutation = useMutation(
-    async ({ type, id }) => {
-      const token = await authNetfilms.getToken()
-      return clientNetfilms(`bookmark/${type}`, {
-        token,
-        data: { id },
-        method: 'POST',
-      })
+  const deleteMutation = useDeleteBookmark({
+    onSuccess() {
+      setBookmarkMessageOpen(true)
+      setMutateBookmarkError('')
     },
-    {
-      onSuccess() {
-        queryClient.invalidateQueries('bookmark')
-        setBookmarkMessageOpen(true)
-        setMutateBookmarkError()
-      },
-      onError(error) {
-        setBookmarkMessageOpen(true)
-        setMutateBookmarkError(error)
-      },
-    }
-  )
-
-  const deleteMutation = useMutation(
-    async ({ type, id }) => {
-      const token = await authNetfilms.getToken()
-      return clientNetfilms(`bookmark/${type}`, {
-        token,
-        data: { id },
-        method: 'DELETE',
-      })
+    onError(error) {
+      setBookmarkMessageOpen(true)
+      setMutateBookmarkError(error)
     },
-    {
-      onSuccess() {
-        queryClient.invalidateQueries('bookmark')
-        setBookmarkMessageOpen(true)
-        setMutateBookmarkError('')
-      },
-      onError(error) {
-        setBookmarkMessageOpen(true)
-        setMutateBookmarkError(error)
-      },
-    }
-  )
+  })
 
   const isInList = data?.bookmark[
     type === TYPE_MOVIE ? 'movies' : 'series'
   ]?.includes(movie?.id)
 
   const handleAddToBookmarks = () => {
-    setBookmarkCalled()
+    setBookmarkCalled(true)
     addMutation.mutate({ type, id: movie.id })
   }
 
   const handleDeleteFromBookmarks = () => {
-    setBookmarkCalled()
+    setBookmarkCalled(true)
     deleteMutation.mutate({ type, id: movie.id })
   }
 

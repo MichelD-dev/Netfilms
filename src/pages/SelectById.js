@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
-import { NavBar } from './NavBar'
-import { Row } from './Row'
-import { Footer } from './Footer'
-import { Header } from './Header'
-import { clientApi } from '../utils/clientApi'
-import { useQuery } from 'react-query'
+import { NavBar } from '../components/NavBar'
+import { Row } from '../components/Row'
+import { Footer } from '../components/Footer'
+import { Header } from '../components/Header'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
 import { useParams, useLocation } from 'react-router-dom'
 import './Netfilm.css'
+import { useMovie } from 'utils/hooks'
 
 const SelectById = () => {
   const { tvId, movieId } = useParams()
@@ -15,13 +14,8 @@ const SelectById = () => {
   const [type, setType] = useState(
     pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
   )
-
   const [id, setId] = useState(type === TYPE_TV ? tvId : movieId)
-  const {
-    data: headerMovie,
-    error,
-    status,
-  } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))
+  const headerMovie = useMovie(type, id)
 
   useEffect(() => {
     setType(type)
@@ -35,7 +29,7 @@ const SelectById = () => {
   return (
     <div>
       <NavBar />
-      <Header movie={headerMovie?.data} type={type} />
+      <Header movie={headerMovie} type={type} />
       <Row
         wideImage
         watermark

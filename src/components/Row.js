@@ -1,9 +1,7 @@
 import { TYPE_MOVIE, imagePath400 } from '../config'
-import { useQuery } from 'react-query'
-import { clientApi } from '../utils/clientApi'
-import { Alert, AlertTitle } from '@mui/material'
 import { RowSkeleton } from 'skeletons/RowSkeleton'
 import { Link } from 'react-router-dom'
+import { useMovieFilter } from 'utils/hooks'
 
 const Row = ({
   title = '',
@@ -13,20 +11,7 @@ const Row = ({
   filter = 'populaire',
   watermark = false,
 }) => {
-  const endpointLatest = `${type}/latest`
-  const endpointPopular = `${type}/popular`
-  const endpointTopRated = `${type}/top_rated`
-  const endpointGenre = `discover/${type}?with_genres=${param}`
-  const endpointTrending = `trending/${type}/day`
-
-  const endpoint =
-    (filter === 'populaire' && endpointPopular) ||
-    (filter === 'latest' && endpointLatest) ||
-    (filter === 'toprated' && endpointTopRated) ||
-    (filter === 'genre' && endpointGenre) ||
-    (filter === 'trending' && endpointTrending)
-
-  const { data, error, status } = useQuery(endpoint, () => clientApi(endpoint))
+  const data = useMovieFilter(type, filter, param)
 
   const buildImagePath = data => {
     const image = wideImage ? data?.backdrop_path : data?.poster_path
@@ -35,24 +20,15 @@ const Row = ({
 
   const watermarkClass = watermark ? 'watermarked' : ''
 
-  if (status === 'loading' || status === 'idle') {
+  if (!data) {
     return <RowSkeleton title={title} wideImage={wideImage} />
-  }
-
-  if (status === 'error') {
-    return (
-      <Alert severity='error'>
-        <AlertTitle>Une erreur est survenue</AlertTitle>
-        Detail : {error.message}
-      </Alert>
-    )
   }
 
   return (
     <div className='row'>
       <h2>{title}</h2>
       <div className='row__posters'>
-        {data?.data?.results?.map(movie => {
+        {data.map(movie => {
           return (
             <Link
               key={movie.id}
