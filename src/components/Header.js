@@ -1,7 +1,6 @@
 import { useState, forwardRef } from 'react'
 import { HeaderSkeleton } from 'skeletons/HeaderSkeleton'
 import { imagePathOriginal, TYPE_MOVIE } from '../config'
-import { useQueryClient } from 'react-query'
 import DeleteIcon from '@mui/icons-material/Delete'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
@@ -12,7 +11,6 @@ const Alert = forwardRef(function Alert(props, ref) {
 })
 
 const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
-  const queryClient = useQueryClient()
   const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)

@@ -5,10 +5,10 @@ import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
 import { useParams, useLocation } from 'react-router-dom'
-import './Netfilm.css'
 import { useMovie } from 'utils/hooks'
+import './Netfilms.css'
 
-const SelectById = () => {
+const SelectById = ({ logout }) => {
   const { tvId, movieId } = useParams()
   const { pathname } = useLocation()
   const [type, setType] = useState(
@@ -18,18 +18,19 @@ const SelectById = () => {
   const headerMovie = useMovie(type, id)
 
   useEffect(() => {
+    const type = pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
     setType(type)
     setId(type === TYPE_TV ? tvId : movieId)
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     })
-  }, [movieId, tvId, type])
+  }, [movieId, tvId, pathname])
 
   return (
     <div>
-      <NavBar />
-      <Header movie={headerMovie} type={type} />
+      <NavBar logout={logout} />
+      <Header movie={headerMovie?.data} type={type} />
       <Row
         wideImage
         watermark

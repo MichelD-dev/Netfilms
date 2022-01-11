@@ -4,13 +4,13 @@ import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
 import { getRandomType, getRandomId } from 'utils/helper'
 import { TYPE_MOVIE, TYPE_TV } from 'config'
-import './Netfilm.css'
+import './Netfilms.css'
 import { useMovie } from 'utils/hooks'
 
 const type = getRandomType()
 const defaultMovieId = getRandomId(type)
 
-const NetfilmsApp = ({ logout }) => {
+const Accueil = ({ logout }) => {
   const headerMovie = useMovie(type, defaultMovieId)
 
   return (
@@ -55,4 +55,4 @@ const NetfilmsApp = ({ logout }) => {
     </>
   )
 }
-export { NetfilmsApp }
+export { Accueil }

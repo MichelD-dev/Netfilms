@@ -49,6 +49,13 @@ export function useFetchData() {
 //------------------------------HOOKS MOVIES------------------------------//
 //------------------------------------------------------------------------//
 
+const useSearchMovie = query => {
+  const { data } = useQuery(`search/multi?query=${query}`, () =>
+    clientApi(`search/multi?query=${query}`)
+  )
+  return data?.data?.results ?? []
+}
+
 const useMovie = (type, id) => {
   const { data } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))
   return data
@@ -145,9 +152,9 @@ const useDeleteBookmark = ({
       })
     },
     {
-      onSuccess() {
+      onSuccess(data) {
         queryClient.invalidateQueries('bookmark')
-        onSuccess()
+        onSuccess(data)
       },
       onError(error) {
         onError(error)
@@ -168,4 +175,5 @@ export {
   useBookmark,
   useAddBookmark,
   useDeleteBookmark,
+  useSearchMovie,
 }

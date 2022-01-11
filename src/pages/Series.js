@@ -4,7 +4,7 @@ import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
 import { getRandomId } from '../utils/helper'
 import { TYPE_TV } from '../config'
-import './Netfilm.css'
+import './Netfilms.css'
 import { useMovie } from 'utils/hooks'
 
 const type = TYPE_TV

@@ -54,7 +54,6 @@ const Bookmarks = ({ logout }) => {
           ))}
         </div>
       </div>
-
       <div className='row'>
         <h2>Séries favorites</h2>
         <div className='row__posters'>

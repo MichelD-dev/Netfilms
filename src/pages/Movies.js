@@ -1,7 +1,7 @@
 import { Footer } from '../components/Footer'
 import { getRandomId } from '../utils/helper'
 import { TYPE_MOVIE } from '../config'
-import './Netfilm.css'
+import './Netfilms.css'
 import { Row } from '../components/Row'
 import { Header } from '../components/Header'
 import { NavBar } from '../components/NavBar'
