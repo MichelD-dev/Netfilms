@@ -10,12 +10,12 @@ import { useMovie } from 'utils/hooks'
 const type = getRandomType()
 const defaultMovieId = getRandomId(type)
 
-const Accueil = ({ logout }) => {
+const Accueil = () => {
   const headerMovie = useMovie(type, defaultMovieId)
 
   return (
     <>
-      <NavBar logout={logout} />
+      <NavBar />
       <Header movie={headerMovie?.data} type={type} />
       <Row
         wideImage

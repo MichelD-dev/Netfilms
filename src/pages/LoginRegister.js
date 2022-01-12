@@ -12,22 +12,25 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useAuth } from 'context/AuthContext'
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     minWidth: '330px',
-    // '& > *': {//FIXME erreur...
-    //   margin: theme.spacing(1),
-    // },
+    '& > *': {
+      //FIXME erreur...
+      margin: theme.spacing(1),
+    },
   },
   dialog: {
     opacity: '0.9',
   },
 }))
 
-const FormLogin = ({ create = false, login, register, logout }) => {
+const FormLogin = ({ create = false }) => {
+  const { login, register } = useAuth()
   const [checked, setChecked] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -35,12 +38,13 @@ const FormLogin = ({ create = false, login, register, logout }) => {
   const classes = useStyles()
   const label = create ? 'Inscrivez-vous' : 'Connexion'
   return (
-    <form className={classes.root} noValidate autoComplete='off'>
+    <form className={classes.root} noValidate>
       <TextField
         id='filled-basic'
         label='Email ou numéro de téléphone'
         variant='filled'
         color='secondary'
+        autoComplete='off'
         value={username}
         onChange={e => setUsername(e.target.value)}
         style={{ opacity: '1' }}
@@ -50,6 +54,7 @@ const FormLogin = ({ create = false, login, register, logout }) => {
         type='password'
         label='Mot de passe'
         variant='filled'
+        autoComplete='off'
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
@@ -64,10 +69,7 @@ const FormLogin = ({ create = false, login, register, logout }) => {
             {label}
           </Button>
           <small>* Consultez nos CGV</small>
-          <small>
-            This page is protected by Google reCAPTCHA to ensure you're not a
-            bot. <span style={{ color: 'blue' }}>Learn more.</span>
-          </small>
+          <small>This page is protected by Google reCAPTCHA.</small>
         </>
       ) : (
         <>
@@ -105,18 +107,10 @@ const FormLogin = ({ create = false, login, register, logout }) => {
   )
 }
 
-function PopupLogin({
-  open,
-  handleClose,
-  signup = false,
-  login,
-  register,
-  logout,
-  error,
-  status,
-}) {
+function PopupLogin({ open, handleClose, signup = false, status }) {
   const classes = useStyles()
   const [create, setCreate] = useState(signup)
+  const { login, logout, register, authError: error } = useAuth()
 
   const handleSignUp = () => {
     setCreate(true)

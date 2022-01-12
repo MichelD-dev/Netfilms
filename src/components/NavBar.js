@@ -6,6 +6,7 @@ import { styled, alpha } from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from 'context/AuthContext'
 
 const margin = { margin: '10px 20px' }
 
@@ -51,7 +52,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-const NavBar = ({ logout }) => {
+const NavBar = () => {
+  const { logout } = useAuth()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [appBarStyle, setAppBarStyle] = useState({
@@ -130,7 +132,7 @@ const NavBar = ({ logout }) => {
           />
         </Search>
         <img
-          style={{ marginLeft: 'auto' }}
+          style={{ marginLeft: 'auto', cursor: 'pointer' }}
           className='nav__avatar'
           src='/images/netflix-avatar.png'
           alt=''

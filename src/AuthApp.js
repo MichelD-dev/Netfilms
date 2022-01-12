@@ -9,8 +9,11 @@ import { Bookmarks } from './pages/Bookmarks'
 import { SelectById } from 'pages/SelectById'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Search } from 'components/Search'
+import { useAuth } from 'context/AuthContext'
 
-function AuthApp({ logout }) {
+function AuthApp() {
+  const { logout } = useAuth()
+
   return (
     <Router>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
