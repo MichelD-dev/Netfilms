@@ -1,7 +1,7 @@
 import { useReducer, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { clientApi, clientNetfilms } from './clientApi'
-import * as authNetfilms from './authProvider'
+import { clientApi } from './clientApi'
+import { useClientNetfilms } from 'context/AuthContext'
 
 //------------------------------------------------------------------------//
 //--------------------------------HOOK USER-------------------------------//
@@ -94,10 +94,8 @@ const useMovieFilter = (type, filter, param) => {
 }
 
 const useBookmark = () => {
-  const { data } = useQuery('bookmark', async () => {
-    const token = await authNetfilms.getToken()
-    return clientNetfilms(`bookmark`, { token })
-  })
+  const clientNetfilms = useClientNetfilms()
+  const { data } = useQuery('bookmark', () => clientNetfilms(`bookmark`))
   return data
 }
 
@@ -107,12 +105,12 @@ const useAddBookmark = ({
   onSettled = () => {},
   onMutate = () => {},
 }) => {
+  const clientNetfilms = useClientNetfilms()
   const queryClient = useQueryClient()
+
   return useMutation(
-    async ({ type, id }) => {
-      const token = await authNetfilms.getToken()
+    ({ type, id }) => {
       return clientNetfilms(`bookmark/${type}`, {
-        token,
         data: { id },
         method: 'POST',
       })
@@ -141,12 +139,11 @@ const useDeleteBookmark = ({
   onSettled = () => {},
   onMutate = () => {},
 }) => {
+  const clientNetfilms = useClientNetfilms()
   const queryClient = useQueryClient()
   return useMutation(
-    async ({ type, id }) => {
-      const token = await authNetfilms.getToken()
+    ({ type, id }) => {
       return clientNetfilms(`bookmark/${type}`, {
-        token,
         data: { id },
         method: 'DELETE',
       })

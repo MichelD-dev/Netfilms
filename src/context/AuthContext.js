@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext, useContext } from 'react'
 import * as authNetfilms from 'utils/authProvider'
-import { clientAuth } from 'utils/clientApi'
+import { clientAuth, clientNetfilms } from 'utils/clientApi'
 import { useFetchData } from 'utils/hooks'
 import { QueryClient } from 'react-query'
 import Backdrop from '@mui/material/Backdrop'
@@ -85,4 +85,11 @@ const AuthProvider = props => {
   throw new Error('Statut invalide')
 }
 
-export { AuthContext, useAuth, AuthProvider }
+const useClientNetfilms = () => {
+  const {
+    authUser: { token },
+  } = useAuth()
+  return (endpoint, data) => clientNetfilms(endpoint, { ...data, token })
+}
+
+export { AuthContext, useAuth, AuthProvider, useClientNetfilms }
