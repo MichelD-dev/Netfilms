@@ -66,7 +66,7 @@ const AuthProvider = props => {
       .catch(err => setAuthError(err))
   const logout = () => {
     authNetfilms.logout()
-    queryClient.clear()
+    queryClient.clear() //FIXME vidage cache
     setData(null)
   }
 

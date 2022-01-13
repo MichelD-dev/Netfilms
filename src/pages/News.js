@@ -16,7 +16,7 @@ const News = () => {
   return (
     <div>
       <NavBar />
-      <Header movie={headerMovie?.data} type={type} />
+      <Header movie={headerMovie} type={type} />
       <Row
         wideImage
         watermark

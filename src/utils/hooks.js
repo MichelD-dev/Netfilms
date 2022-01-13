@@ -58,7 +58,7 @@ const useSearchMovie = query => {
 
 const useMovie = (type, id) => {
   const { data } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))
-  return data
+  return data?.data
 }
 
 const useMovieFilter = (type, filter, param) => {

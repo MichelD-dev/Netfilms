@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { NavBar } from '../components/NavBar'
-import { Row } from '../components/Row'
-import { Footer } from '../components/Footer'
-import { Header } from '../components/Header'
-import { TYPE_MOVIE, TYPE_TV } from '../config'
+import { NavBar } from 'components/NavBar'
+import { Row } from 'components/Row'
+import { Footer } from 'components/Footer'
+import { Header } from 'components/Header'
+import { TYPE_MOVIE, TYPE_TV } from 'config'
 import { useParams, useLocation } from 'react-router-dom'
 import { useMovie } from 'utils/hooks'
+import { useHistory } from 'context/HistoryContext'
 import './Netfilms.css'
 
 const SelectById = ({ logout }) => {
@@ -16,6 +17,17 @@ const SelectById = ({ logout }) => {
   )
   const [id, setId] = useState(type === TYPE_TV ? tvId : movieId)
   const headerMovie = useMovie(type, id)
+
+  const { movies, series, addSerie, addMovie } = useHistory()
+
+  useEffect(() => {
+    if (headerMovie === undefined) return
+    type === TYPE_TV && !series.includes(headerMovie) && addSerie(headerMovie)
+    type === TYPE_MOVIE &&
+      !movies.includes(headerMovie) &&
+      addMovie(headerMovie)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [headerMovie])
 
   useEffect(() => {
     const type = pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
@@ -30,7 +42,7 @@ const SelectById = ({ logout }) => {
   return (
     <div>
       <NavBar logout={logout} />
-      <Header movie={headerMovie?.data} type={type} />
+      <Header movie={headerMovie} type={type} />
       <Row
         wideImage
         watermark

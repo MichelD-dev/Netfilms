@@ -7,6 +7,7 @@ import InputBase from '@mui/material/InputBase'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'context/AuthContext'
+import { HistoryMenu } from './HistoryMenu'
 
 const margin = { margin: '10px 20px' }
 
@@ -21,7 +22,7 @@ const Search = styled('div')(({ theme }) => ({
   },
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    /*marginLeft: theme.spacing(1),*/
+    // marginLeft: theme.spacing(1),
     width: 'auto',
   },
 }))
@@ -77,6 +78,7 @@ const NavBar = () => {
       }
     }
     window.addEventListener('scroll', onScroll)
+
     return () => window.removeEventListener('scroll', onScroll)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -131,8 +133,9 @@ const NavBar = () => {
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
+        <HistoryMenu style={{ cursor: 'pointer', marginRight: '10px' }} />
         <img
-          style={{ marginLeft: 'auto', cursor: 'pointer' }}
+          style={{ cursor: 'pointer' }}
           className='nav__avatar'
           src='/images/netflix-avatar.png'
           alt=''

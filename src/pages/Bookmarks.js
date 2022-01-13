@@ -31,7 +31,7 @@ const Bookmarks = ({ logout }) => {
       <NavBar logout={logout} />
       <Header
         type={type}
-        movie={headerMovie?.data}
+        movie={headerMovie}
         noBookmarks={
           data?.bookmark?.movies?.length === 0 &&
           data?.bookmark?.series?.length === 0

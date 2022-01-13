@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { AuthProvider } from 'context/AuthContext'
+import { HistoryContextProvider } from './HistoryContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,7 +45,9 @@ const AppProviders = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <HistoryContextProvider>{children}</HistoryContextProvider>
+        </AuthProvider>
       </ThemeProvider>
       {process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />

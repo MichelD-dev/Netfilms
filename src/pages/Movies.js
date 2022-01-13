@@ -16,7 +16,7 @@ const Movies = () => {
   return (
     <div>
       <NavBar />
-      <Header movie={headerMovie?.data} type={type} />
+      <Header movie={headerMovie} type={type} />
       <Row wideImage watermark type={type} filter='trending' title='Films' />
       <Row watermark type={type} filter='toprated' title='Les mieux notés' />
       <Row

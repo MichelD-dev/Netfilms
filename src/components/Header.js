@@ -14,7 +14,7 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
   const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
-  const title = movie?.title ?? movie?.name
+  const title = type === TYPE_MOVIE ? movie?.title : movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
     backgroundImage: `url('${imageUrl}')`,
@@ -71,7 +71,11 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
       <div className='banner__contents'>
         <h1 className='banner__title'>{title ?? '...'}</h1>
         <div className='banner__buttons'>
-          <button className='banner__button banner__buttonplay'>Lecture</button>
+          <a href={movie.homepage} target='_blank' rel='noreferrer'>
+            <button className='banner__button banner__buttonplay'>
+              Lecture
+            </button>
+          </a>
           {!isInList ? (
             <button
               onClick={handleAddToBookmarks}
