@@ -2,6 +2,7 @@ import { imagePath400 } from '../config'
 import { clientApi } from '../utils/clientApi'
 import { useQuery } from 'react-query'
 import { useState, useEffect } from 'react'
+import CardMedia from '@mui/material/CardMedia'
 
 const Card = ({ onClick, id, type, watermark, wideImage }) => {
   const { data } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))
@@ -18,16 +19,18 @@ const Card = ({ onClick, id, type, watermark, wideImage }) => {
   const watermarkClass = watermark ? 'watermarked' : ''
 
   return (
-    <div
-      key={id}
-      onClick={() => {
-        onClick(type, id)
-      }}
-    >
-      <div className={`row__poster row__posterLarge ${watermarkClass}`}>
-        <img src={image} alt='' />
-      </div>
-    </div>
+    <>
+      <CardMedia
+        key={id}
+        onClick={() => {
+          onClick(type, id)
+        }}
+      >
+        <div className={`row__poster row__posterLarge ${watermarkClass}`}>
+          <img src={image} alt='' />
+        </div>
+      </CardMedia>
+    </>
   )
 }
 

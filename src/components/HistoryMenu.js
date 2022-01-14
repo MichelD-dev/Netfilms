@@ -164,7 +164,7 @@ function HistoryMenuCard({ movie, type, wideImage = false }) {
         </Box>
       </Box>
 
-      <CardMedia //TODO à réutiliser pour onClick...
+      <CardMedia
         onClick={handleClick}
         component='img'
         sx={{ width: 200 }}

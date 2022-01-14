@@ -1,47 +1,23 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-} from 'react'
+import { createContext, useContext, useEffect, useReducer } from 'react'
 import { TYPE_MOVIE, TYPE_TV } from 'config'
 
 const HistoryContext = createContext()
 
 const MAX_ELEMENTS = 4
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_MOVIE':
-      return {
-        ...state,
-        movies: [...state.movies, action.movie].slice(0, MAX_ELEMENTS - 1),
-      }
-    case 'ADD_SERIE':
-      return {
-        ...state,
-        series: [...state.series, action.serie].slice(0, MAX_ELEMENTS - 1),
-      }
-    default:
-      throw new Error(`L'action ${action.type} n'est pas reconnue`)
-  }
-}
+const reducer = (state, action) => ({ ...state, ...action })
 
 const HistoryContextProvider = props => {
   const [state, dispatch] = useReducer(reducer, { movies: [], series: [] })
 
-  const addMovie = useCallback(
-    movie => dispatch({ type: 'ADD_MOVIE', movie }),
-    []
-  )
-  const addSerie = useCallback(
-    serie => dispatch({ type: 'ADD_SERIE', serie }),
-    []
-  )
+  const addMovie = movie =>
+    dispatch({ movies: [...state.movies, movie].slice(0, MAX_ELEMENTS - 1) })
+  const addSerie = serie =>
+    dispatch({ series: [...state.series, serie].slice(0, MAX_ELEMENTS - 1) })
+  const clearHistory = () => dispatch({ movies: [], series: [] })
 
   const { series, movies } = state
-  const value = { movies, series, addMovie, addSerie }
+  const value = { movies, series, addMovie, addSerie, clearHistory }
 
   return <HistoryContext.Provider value={value} {...props} />
 }
@@ -64,4 +40,9 @@ const useAddToHistory = (movie, type = TYPE_TV) => {
   }, [movie])
 }
 
-export { HistoryContextProvider, useHistory, useAddToHistory }
+const useClearHistory = () => {
+  const { clearHistory } = useHistory()
+  return clearHistory
+}
+
+export { HistoryContextProvider, useHistory, useAddToHistory, useClearHistory }

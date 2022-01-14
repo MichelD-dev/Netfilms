@@ -45,9 +45,9 @@ const AppProviders = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <HistoryContextProvider>{children}</HistoryContextProvider>
-        </AuthProvider>
+        <HistoryContextProvider>
+          <AuthProvider>{children} </AuthProvider>
+        </HistoryContextProvider>
       </ThemeProvider>
       {process.env.NODE_ENV === 'development' && (
         <ReactQueryDevtools initialIsOpen={false} />

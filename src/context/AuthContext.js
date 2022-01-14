@@ -5,6 +5,7 @@ import { useFetchData } from 'utils/hooks'
 import { QueryClient } from 'react-query'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import { useClearHistory } from './HistoryContext'
 
 const AuthContext = createContext()
 
@@ -52,6 +53,7 @@ const AuthProvider = props => {
   useEffect(() => {
     execute(getUserByToken())
   }, [execute])
+  const clearHistory = useClearHistory()
 
   const [authError, setAuthError] = useState()
   const login = data =>
@@ -67,6 +69,7 @@ const AuthProvider = props => {
   const logout = () => {
     authNetfilms.logout()
     queryClient.clear() //FIXME vidage cache
+    clearHistory()
     setData(null)
   }
 
