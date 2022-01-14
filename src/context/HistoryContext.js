@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useReducer } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react'
+import { TYPE_MOVIE, TYPE_TV } from 'config'
 
 const HistoryContext = createContext()
 
@@ -46,4 +53,15 @@ const useHistory = () => {
   return context
 }
 
-export { HistoryContextProvider, useHistory }
+const useAddToHistory = (movie, type = TYPE_TV) => {
+  const { movies, series, addMovie, addSerie } = useHistory()
+
+  useEffect(() => {
+    if (movie === undefined) return
+    type === TYPE_TV && !series.includes(movie) && addSerie(movie)
+    type === TYPE_MOVIE && !movies.includes(movie) && addMovie(movie)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [movie])
+}
+
+export { HistoryContextProvider, useHistory, useAddToHistory }

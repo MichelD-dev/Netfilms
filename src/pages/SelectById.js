@@ -6,7 +6,7 @@ import { Header } from 'components/Header'
 import { TYPE_MOVIE, TYPE_TV } from 'config'
 import { useParams, useLocation } from 'react-router-dom'
 import { useMovie } from 'utils/hooks'
-import { useHistory } from 'context/HistoryContext'
+import { useAddToHistory } from 'context/HistoryContext'
 import './Netfilms.css'
 
 const SelectById = ({ logout }) => {
@@ -18,16 +18,7 @@ const SelectById = ({ logout }) => {
   const [id, setId] = useState(type === TYPE_TV ? tvId : movieId)
   const headerMovie = useMovie(type, id)
 
-  const { movies, series, addSerie, addMovie } = useHistory()
-
-  useEffect(() => {
-    if (headerMovie === undefined) return
-    type === TYPE_TV && !series.includes(headerMovie) && addSerie(headerMovie)
-    type === TYPE_MOVIE &&
-      !movies.includes(headerMovie) &&
-      addMovie(headerMovie)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [headerMovie])
+  useAddToHistory(headerMovie, type)
 
   useEffect(() => {
     const type = pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE
