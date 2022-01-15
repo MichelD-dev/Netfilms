@@ -1,12 +1,18 @@
 import './mocks'
-import { AuthApp } from 'AuthApp'
-import { UnauthApp } from 'UnauthApp'
 import { useAuth } from 'context/AuthContext'
 import { AppProviders } from 'context'
+import { lazy, Suspense } from 'react'
+import LoadingFullScreen from 'components/LoadingFullScreen'
+const AuthApp = lazy(() => import(/* webpackPrefetch: true */ 'AuthApp'))
+const UnauthApp = lazy(() => import('UnauthApp'))
 
 const AppConsumer = () => {
   const { authUser } = useAuth()
-  return authUser ? <AuthApp /> : <UnauthApp />
+  return (
+    <Suspense fallback={<LoadingFullScreen />}>
+      {authUser ? <AuthApp /> : <UnauthApp />}
+    </Suspense>
+  )
 }
 
 function App() {

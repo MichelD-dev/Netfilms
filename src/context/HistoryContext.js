@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useReducer } from 'react'
+import {
+  useCallback,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react'
 import { TYPE_MOVIE, TYPE_TV } from 'config'
 
 const HistoryContext = createContext()
@@ -10,14 +17,26 @@ const reducer = (state, action) => ({ ...state, ...action })
 const HistoryContextProvider = props => {
   const [state, dispatch] = useReducer(reducer, { movies: [], series: [] })
 
-  const addMovie = movie =>
-    dispatch({ movies: [...state.movies, movie].slice(0, MAX_ELEMENTS - 1) })
-  const addSerie = serie =>
-    dispatch({ series: [...state.series, serie].slice(0, MAX_ELEMENTS - 1) })
-  const clearHistory = () => dispatch({ movies: [], series: [] })
+  const addMovie = useCallback(
+    movie =>
+      dispatch({ movies: [...state.movies, movie].slice(0, MAX_ELEMENTS - 1) }),
+    [state.movies]
+  )
+  const addSerie = useCallback(
+    serie =>
+      dispatch({ series: [...state.series, serie].slice(0, MAX_ELEMENTS - 1) }),
+    [state.series]
+  )
+  const clearHistory = useCallback(
+    () => dispatch({ movies: [], series: [] }),
+    []
+  )
 
   const { series, movies } = state
-  const value = { movies, series, addMovie, addSerie, clearHistory }
+  const value = useMemo(
+    () => ({ movies, series, addMovie, addSerie, clearHistory }),
+    [movies, series, addMovie, addSerie, clearHistory]
+  )
 
   return <HistoryContext.Provider value={value} {...props} />
 }

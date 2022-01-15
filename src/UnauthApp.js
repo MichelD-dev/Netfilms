@@ -1,4 +1,4 @@
-import LoginRegister from 'pages/LoginRegister'
+import LoginRegister from 'components/LoginRegister'
 
 const imageUrl = '/images/posters.jpg'
 
@@ -26,4 +26,4 @@ function UnauthApp() {
   )
 }
 
-export { UnauthApp }
+export default UnauthApp

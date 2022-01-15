@@ -72,4 +72,4 @@ const SelectById = ({ logout }) => {
     </div>
   )
 }
-export { SelectById }
+export default SelectById

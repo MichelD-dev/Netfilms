@@ -20,7 +20,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     minWidth: '330px',
     '& > *': {
-      //FIXME erreur...
       margin: theme.spacing(1),
     },
   },

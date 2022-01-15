@@ -28,16 +28,15 @@ const Search = ({ logout }) => {
         <>
           <RowView
             data={movies}
-            wideImage={true}
-            watermark={true}
+            wideImage
+            watermark
             type={TYPE_MOVIE}
             filter='trending'
             title='Films correspondants'
           />
           <RowView
             data={series}
-            wideImage={false}
-            watermark={true}
+            watermark
             type={TYPE_TV}
             filter='trending'
             title='Séries correspondantes'
@@ -49,4 +48,4 @@ const Search = ({ logout }) => {
   )
 }
 
-export { Search }
+export default Search

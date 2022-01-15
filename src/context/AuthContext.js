@@ -1,4 +1,11 @@
-import { useEffect, useState, createContext, useContext } from 'react'
+import {
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+  useMemo,
+  useCallback,
+} from 'react'
 import * as authNetfilms from 'utils/authProvider'
 import { clientAuth, clientNetfilms } from 'utils/clientApi'
 import { useFetchData } from 'utils/hooks'
@@ -56,28 +63,38 @@ const AuthProvider = props => {
   const clearHistory = useClearHistory()
 
   const [authError, setAuthError] = useState()
-  const login = data =>
-    authNetfilms
-      .login(data)
-      .then(user => setData(user))
-      .catch(err => setAuthError(err))
-  const register = data =>
-    authNetfilms
-      .register(data)
-      .then(user => setData(user))
-      .catch(err => setAuthError(err))
-  const logout = () => {
+
+  const login = useCallback(
+    data =>
+      authNetfilms
+        .login(data)
+        .then(user => setData(user))
+        .catch(err => setAuthError(err)),
+    [setData]
+  )
+  const register = useCallback(
+    data =>
+      authNetfilms
+        .register(data)
+        .then(user => setData(user))
+        .catch(err => setAuthError(err)),
+    [setData]
+  )
+  const logout = useCallback(() => {
     authNetfilms.logout()
-    queryClient.clear() //FIXME vidage cache
+    queryClient.clear()
     clearHistory()
     setData(null)
-  }
+  }, [clearHistory, setData])
 
-  const value = { authUser, login, register, logout, authError }
+  const value = useMemo(
+    () => ({ authUser, login, register, logout, authError }),
+    [authUser, login, register, logout, authError]
+  )
 
   if (status === 'fetching' || status === 'idle')
     return (
-      <Backdrop open={true}>
+      <Backdrop open>
         <CircularProgress color='primary' />
       </Backdrop>
     )

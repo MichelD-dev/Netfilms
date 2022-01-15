@@ -50,4 +50,4 @@ const News = () => {
     </div>
   )
 }
-export { News }
+export default News

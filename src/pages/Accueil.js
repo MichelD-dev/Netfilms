@@ -55,4 +55,4 @@ const Accueil = () => {
     </>
   )
 }
-export { Accueil }
+export default Accueil

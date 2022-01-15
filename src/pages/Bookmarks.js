@@ -73,4 +73,4 @@ const Bookmarks = ({ logout }) => {
   )
 }
 
-export { Bookmarks }
+export default Bookmarks

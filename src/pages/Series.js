@@ -53,4 +53,4 @@ const Series = () => {
     </div>
   )
 }
-export { Series }
+export default Series
