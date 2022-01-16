@@ -5,6 +5,7 @@ import { getRandomId } from '../utils/helper'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
 import Card from '../components/Card'
 import { useBookmark, useMovie } from 'utils/hooks'
+import { Profiler } from 'utils/Profiler'
 
 const RANDOM_MOVIE = getRandomId(TYPE_MOVIE)
 
@@ -27,7 +28,7 @@ const Bookmarks = ({ logout }) => {
   const headerMovie = useMovie(TYPE_MOVIE, id)
 
   return (
-    <>
+    <Profiler id='Bookmark' appData={{ bookmark: data?.bookmark }}>
       <NavBar logout={logout} />
       <Header
         type={type}
@@ -69,7 +70,7 @@ const Bookmarks = ({ logout }) => {
           ))}
         </div>
       </div>
-    </>
+    </Profiler>
   )
 }
 

@@ -8,15 +8,15 @@ import LoadingFullScreen from 'components/LoadingFullScreen'
 function AuthApp() {
   const { logout } = useAuth()
 
-  const Accueil = lazy(() => import('./pages/Accueil'))
-  const Movies = lazy(() => import('./pages/Movies'))
-  const Series = lazy(() => import('./pages/Series'))
-  const News = lazy(() => import('./pages/News'))
-  const Bookmarks = lazy(() => import('./pages/Bookmarks'))
-  const Error404 = lazy(() => import('./components/Error404'))
-  const Search = lazy(() => import('./components/Search'))
+  const Accueil = lazy(() => import('pages/Accueil'))
+  const Movies = lazy(() => import('pages/Movies'))
+  const Series = lazy(() => import('pages/Series'))
+  const News = lazy(() => import('pages/News'))
+  const Bookmarks = lazy(() => import('pages/Bookmarks'))
+  const Error404 = lazy(() => import('components/Error404'))
+  const Search = lazy(() => import('components/Search'))
   const SelectById = lazy(() =>
-    import(/* webpackPrefetch: true */ './pages/SelectById')
+    import(/* webpackPrefetch: true */ 'pages/SelectById')
   )
 
   return (

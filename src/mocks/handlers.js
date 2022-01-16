@@ -87,6 +87,9 @@ const handlers = [
     const bookmark = await db.loadBookmarkByUid(id)
     return res(ctx.json({ bookmark }))
   }),
+  rest.post(`${AUTH_URL}/monitoring`, async (req, res, ctx) => {
+    return res(ctx.json({ ok: 'ok' }))
+  }),
 ]
 
 const getToken = req => req.headers.get('Authorization')?.replace('Bearer ', '')

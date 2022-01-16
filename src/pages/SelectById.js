@@ -8,6 +8,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import { useMovie } from 'utils/hooks'
 import { useAddToHistory } from 'context/HistoryContext'
 import './Netfilms.css'
+import { Profiler } from 'utils/Profiler'
 
 const SelectById = ({ logout }) => {
   const { tvId, movieId } = useParams()
@@ -31,7 +32,7 @@ const SelectById = ({ logout }) => {
   }, [movieId, tvId, pathname])
 
   return (
-    <div>
+    <Profiler id='Film by Id' appData={{ type, id: headerMovie?.id }}>
       <NavBar logout={logout} />
       <Header movie={headerMovie} type={type} />
       <Row
@@ -69,7 +70,7 @@ const SelectById = ({ logout }) => {
         title='Films: les meilleurs thrillers'
       />
       <Footer />
-    </div>
+    </Profiler>
   )
 }
 export default SelectById
