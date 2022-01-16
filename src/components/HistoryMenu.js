@@ -91,37 +91,38 @@ function HistoryMenu({ style }) {
             Dernières visites
           </MenuItem>
         )}
-        <Typography variant='h2'>
-          {' '}
-          <Box
-            sx={{
-              fontSize: 'h6.fontSize',
-              fontWeight: 'bold',
-              mt: 2,
-              ml: 3,
-            }}
-          >
-            Films
-          </Box>
-        </Typography>
+        {movies.length !== 0 && (
+          <Typography variant='h2'>
+            <Box
+              sx={{
+                fontSize: 'h6.fontSize',
+                mt: 2,
+                ml: 3,
+              }}
+            >
+              Films
+            </Box>
+          </Typography>
+        )}
         {movies?.map((movie, id) => (
           <MenuItem key={id} onClick={handleClose} disableRipple>
             <HistoryMenuCard wideImage movie={movie} type={TYPE_MOVIE} />
           </MenuItem>
         ))}
         <Divider sx={{ my: 0.5 }} />
-        <Typography variant='h2'>
-          <Box
-            sx={{
-              fontSize: 'h6.fontSize',
-              fontWeight: 'bold',
-              mt: 2,
-              ml: 3,
-            }}
-          >
-            Series
-          </Box>
-        </Typography>
+        {series.length !== 0 && (
+          <Typography variant='h2'>
+            <Box
+              sx={{
+                fontSize: 'h6.fontSize',
+                mt: 2,
+                ml: 3,
+              }}
+            >
+              Series
+            </Box>
+          </Typography>
+        )}
         {series?.map((serie, id) => (
           <MenuItem key={id} onClick={handleClose} disableRipple>
             <HistoryMenuCard wideImage movie={serie} type={TYPE_TV} />

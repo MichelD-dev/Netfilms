@@ -3,6 +3,7 @@ import { clientApi } from '../utils/clientApi'
 import { useQuery } from 'react-query'
 import { useState, useEffect } from 'react'
 import CardMedia from '@mui/material/CardMedia'
+import 'pages/Netfilms.css'
 
 const Card = ({ onClick, id, type, watermark, wideImage }) => {
   const { data } = useQuery(`${type}/${id}`, () => clientApi(`${type}/${id}`))

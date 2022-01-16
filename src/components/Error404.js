@@ -1,6 +1,7 @@
 import { AppBar, Toolbar } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { NavBar } from './NavBar'
+import 'pages/Netfilms.css'
 
 function Error404() {
   const imageUrl = '/images/bg-lost-in-space.png'

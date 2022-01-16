@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'context/AuthContext'
 import { HistoryMenu } from './HistoryMenu'
+import 'pages/Netfilms.css'
 
 const margin = { margin: '10px 20px' }
 

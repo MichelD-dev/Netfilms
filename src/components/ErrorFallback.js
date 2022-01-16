@@ -1,4 +1,5 @@
 import { NavBar } from './NavBar'
+import 'pages/Netfilms.css'
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (

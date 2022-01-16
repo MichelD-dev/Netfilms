@@ -6,6 +6,7 @@ import { TYPE_MOVIE, TYPE_TV } from '../config'
 import { useParams } from 'react-router-dom'
 import { useSearchMovie, useMovie } from '../utils/hooks'
 import { RowView } from './RowView'
+import 'pages/Netfilms.css'
 
 const Search = ({ logout }) => {
   const { query } = useParams()

@@ -1,4 +1,5 @@
 import Skeleton from '@mui/material/Skeleton'
+import 'pages/Netfilms.css'
 
 const RowSkeleton = ({ title = '', nbElements = 20, wideImage = false }) => {
   const postersSkeletons = []

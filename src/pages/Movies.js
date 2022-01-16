@@ -1,5 +1,5 @@
 import { Footer } from '../components/Footer'
-import { getRandomId } from '../utils/helper'
+import { getRandomId } from '../utils/helpers'
 import { TYPE_MOVIE } from '../config'
 import './Netfilms.css'
 import { Row } from '../components/Row'

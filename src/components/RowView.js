@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { TYPE_MOVIE, imagePath400 } from '../config'
 import { RowSkeleton } from '../skeletons/RowSkeleton'
 import Card from '../components/Card'
+import 'pages/Netfilms.css'
+import { Link } from 'react-router-dom'
 
 export const RowView = ({
   data = [],

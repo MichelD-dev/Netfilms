@@ -2,6 +2,7 @@ import { TYPE_MOVIE, imagePath400 } from '../config'
 import { RowSkeleton } from 'skeletons/RowSkeleton'
 import { Link } from 'react-router-dom'
 import { useMovieFilter } from 'utils/hooks'
+import 'pages/Netfilms.css'
 
 const Row = ({
   title = '',

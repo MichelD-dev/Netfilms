@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { NavBar } from '../components/NavBar'
 import { Header } from '../components/Header'
-import { getRandomId } from '../utils/helper'
+import { getRandomId } from '../utils/helpers'
 import { TYPE_MOVIE, TYPE_TV } from '../config'
 import Card from '../components/Card'
 import { useBookmark, useMovie } from 'utils/hooks'
 import { Profiler } from 'utils/Profiler'
+import 'pages/Netfilms.css'
 
 const RANDOM_MOVIE = getRandomId(TYPE_MOVIE)
 

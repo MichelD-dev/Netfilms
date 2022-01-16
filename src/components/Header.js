@@ -5,12 +5,13 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import { useAddBookmark, useBookmark, useDeleteBookmark } from 'utils/hooks'
+import 'pages/Netfilms.css'
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
 })
 
-const Header = ({ movie, type = TYPE_MOVIE, noBookmarks }) => {
+const Header = ({ movie, type = TYPE_MOVIE, noBookmarks = false }) => {
   const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
