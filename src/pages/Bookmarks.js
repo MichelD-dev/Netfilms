@@ -12,7 +12,7 @@ const RANDOM_MOVIE = getRandomId(TYPE_MOVIE)
 
 const Bookmarks = ({ logout }) => {
   const data = useBookmark()
-  const [header, setHeader] = useState({ type: null, movie: null })
+  const [header, setHeader] = useState({ type: null, id: null })
 
   const id =
     header.id ??
@@ -26,7 +26,7 @@ const Bookmarks = ({ logout }) => {
     (data?.bookmark?.series?.length !== 0 && TYPE_TV) ||
     TYPE_MOVIE
 
-  const headerMovie = useMovie(TYPE_MOVIE, id)
+  const headerMovie = useMovie(type, id)
 
   return (
     <Profiler id='Bookmark' appData={{ bookmark: data?.bookmark }}>

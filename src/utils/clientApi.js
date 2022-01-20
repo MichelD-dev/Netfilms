@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { apiKey, lang, API_URL, AUTH_URL } from '../config'
+import * as authNetfilms from '../utils/authProvider'
 
 // const sleep = t => new Promise(resolve => setTimeout(resolve, t))
 
@@ -21,7 +22,7 @@ const clientApi = async endpoint => {
   })
 }
 
-const clientAuth = (endpoint, { token, data }) => {
+const clientAuth = (endpoint, { token, data } = {}) => {
   const config = {
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
@@ -33,7 +34,10 @@ const clientAuth = (endpoint, { token, data }) => {
     : axios.get(`${AUTH_URL}/${endpoint}`, config)
 }
 
-const clientNetfilms = async (endpoint, { token, data, method = 'GET' }) => {
+const clientNetfilms = async (
+  endpoint,
+  { token, data, method = 'GET' } = {}
+) => {
   const config = {
     method,
     url: `${AUTH_URL}/${endpoint}`,
@@ -48,6 +52,10 @@ const clientNetfilms = async (endpoint, { token, data, method = 'GET' }) => {
       return response.data
     })
     .catch(error => {
+      if (error?.response?.status === 401) {
+        authNetfilms.logout()
+        return Promise.reject({ message: 'Authentification incorrecte' })
+      }
       if (error.response) {
         return Promise.reject(error.response.data)
       } else {

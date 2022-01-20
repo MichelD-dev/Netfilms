@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { NavBar } from './NavBar'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -10,17 +10,26 @@ import 'pages/Netfilms.css'
 
 const Search = ({ logout }) => {
   const { query } = useParams()
-  const defaultMovie = useMovie(TYPE_MOVIE, 785752)
   const data = useSearchMovie(query)
-  const headerMovie = data?.[0] ?? defaultMovie
-  const type = headerMovie?.media_type
+  const [header, setHeader] = useState({ type: null, id: null })
+
   const movies = data.filter(movie => movie.media_type === TYPE_MOVIE)
   const series = data.filter(serie => serie.media_type === TYPE_TV)
+
+  const id = header.id ?? movies?.[0]?.id ?? series?.[0]?.id ?? 785752
+
+  const type =
+    header.type ||
+    (movies?.length !== 0 && TYPE_MOVIE) ||
+    (series?.length !== 0 && TYPE_TV) ||
+    TYPE_MOVIE
+
+  const headerMovie = useMovie(type, id)
 
   return (
     <div>
       <NavBar logout={logout} />
-      <Header movie={headerMovie} type={type} />
+      <Header movie={headerMovie} type={header?.type} />
       {data?.length === 0 ? (
         <div className='row'>
           <h2>Pas de résultats</h2>
@@ -29,6 +38,7 @@ const Search = ({ logout }) => {
         <>
           <RowView
             data={movies}
+            setHeader={setHeader}
             wideImage
             watermark
             type={TYPE_MOVIE}
@@ -37,7 +47,7 @@ const Search = ({ logout }) => {
           />
           <RowView
             data={series}
-            watermark
+            setHeader={setHeader}
             type={TYPE_TV}
             filter='trending'
             title='Séries correspondantes'

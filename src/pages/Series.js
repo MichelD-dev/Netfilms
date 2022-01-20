@@ -2,16 +2,14 @@ import { NavBar } from '../components/NavBar'
 import { Row } from '../components/Row'
 import { Footer } from '../components/Footer'
 import { Header } from '../components/Header'
-import { getRandomId } from '../utils/helpers'
 import { TYPE_TV } from '../config'
 import './Netfilms.css'
-import { useMovie } from 'utils/hooks'
+import { useMovieFilter } from 'utils/hooks'
 
 const type = TYPE_TV
-const defaultMovieId = getRandomId(type)
 
 const Series = () => {
-  const headerMovie = useMovie(type, defaultMovieId)
+  const headerMovie = useMovieFilter(type, 'trending')[0]
 
   return (
     <div>

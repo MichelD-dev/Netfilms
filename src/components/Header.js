@@ -15,7 +15,7 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks = false }) => {
   const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
-  const title = type === TYPE_MOVIE ? movie?.title : movie?.name
+  const title = movie?.title ?? movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
     backgroundImage: `url('${imageUrl}')`,
