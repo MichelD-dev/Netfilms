@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 import { HeaderSkeleton } from 'skeletons/HeaderSkeleton'
 import { imagePathOriginal, TYPE_MOVIE } from '../config'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -15,7 +15,7 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks = false }) => {
   const [mutateBookmarkError, setMutateBookmarkError] = useState('')
   const [bookmarkMessageOpen, setBookmarkMessageOpen] = useState(false)
   const [bookmarkCalled, setBookmarkCalled] = useState(false)
-  const title = type === TYPE_MOVIE ? movie?.title : movie?.name
+  const title = movie?.title ?? movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
     backgroundImage: `url('${imageUrl}')`,
@@ -62,6 +62,8 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks = false }) => {
     setBookmarkCalled(true)
     deleteMutation.mutate({ type, id: movie.id })
   }
+
+  useEffect(() => noBookmarks && setBookmarkMessageOpen(true), [noBookmarks])
 
   if (!movie) {
     return <HeaderSkeleton />
