@@ -9,7 +9,7 @@ import {
 import * as authNetfilms from 'utils/authProvider'
 import { clientAuth, clientNetfilms } from 'utils/clientApi'
 import { useFetchData } from 'utils/hooks'
-import { QueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useClearHistory } from './HistoryContext'
@@ -33,29 +33,8 @@ async function getUserByToken() {
   return user
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      useErrorBoundary: true,
-      refetchOnWindowFocus: false,
-      retryDelay: 500,
-      retry: (failureCount, error) => {
-        if (error.status === 404) return false
-        else if (error.status === 401) return false
-        else if (failureCount > 3) return false
-        else return true
-      },
-    },
-    mutations: {
-      useErrorBoundary: false,
-      refetchOnWindowFocus: false,
-      retryDelay: 500,
-      retry: 1,
-    },
-  },
-})
-
 const AuthProvider = props => {
+  const queryclient = useQueryClient()
   const { data: authUser, status, execute, setData } = useFetchData()
   useEffect(() => {
     execute(getUserByToken())
@@ -82,10 +61,10 @@ const AuthProvider = props => {
   )
   const logout = useCallback(() => {
     authNetfilms.logout()
-    queryClient.clear()
+    queryclient.clear()
     clearHistory()
     setData(null)
-  }, [clearHistory, setData])
+  }, [clearHistory, queryclient, setData])
 
   const value = useMemo(
     () => ({ authUser, login, register, logout, authError }),

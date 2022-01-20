@@ -1,17 +1,15 @@
 import { Footer } from '../components/Footer'
-import { getRandomId } from '../utils/helpers'
 import { TYPE_MOVIE } from '../config'
 import './Netfilms.css'
 import { Row } from '../components/Row'
 import { Header } from '../components/Header'
 import { NavBar } from '../components/NavBar'
-import { useMovie } from 'utils/hooks'
+import { useMovieFilter } from 'utils/hooks'
 
 const type = TYPE_MOVIE
-const defaultMovieId = getRandomId(type)
 
 const Movies = () => {
-  const headerMovie = useMovie(type, defaultMovieId)
+  const headerMovie = useMovieFilter(type, 'trending')[0]
 
   return (
     <div>
