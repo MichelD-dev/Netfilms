@@ -28,11 +28,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const FormLogin = ({ create = false }) => {
+const FormLogin = ({ user: { name, password }, setUser, create = false }) => {
   const { login, register } = useAuth()
   const [checked, setChecked] = useState(false)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
 
   const classes = useStyles()
   const label = create ? 'Inscrivez-vous' : 'Connexion'
@@ -44,8 +42,8 @@ const FormLogin = ({ create = false }) => {
         variant='filled'
         color='secondary'
         autoComplete='off'
-        value={username}
-        onChange={e => setUsername(e.target.value)}
+        value={name}
+        onChange={e => setUser({ name: e.target.value, password })}
         style={{ opacity: '1' }}
       />
       <TextField
@@ -55,7 +53,7 @@ const FormLogin = ({ create = false }) => {
         variant='filled'
         autoComplete='off'
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={e => setUser({ password: e.target.value, name })}
       />
       {create ? (
         <>
@@ -63,7 +61,7 @@ const FormLogin = ({ create = false }) => {
             style={{ margin: '20px 0 5px 0' }}
             variant='contained'
             color='secondary'
-            onClick={() => register({ username, password })}
+            onClick={() => register({ username: name, password })}
           >
             {label}
           </Button>
@@ -76,12 +74,11 @@ const FormLogin = ({ create = false }) => {
             style={{ margin: '20px 0 5px 0' }}
             variant='contained'
             color='secondary'
-            onClick={() => login({ username, password })}
+            onClick={() => login({ username: name, password })}
           >
             {label}
           </Button>
           <div>
-            {' '}
             <FormGroup row>
               <FormControlLabel
                 control={
@@ -109,14 +106,17 @@ const FormLogin = ({ create = false }) => {
 function PopupLogin({ open, handleClose, signup = false, status }) {
   const classes = useStyles()
   const [create, setCreate] = useState(signup)
+  const [user, setUser] = useState({ name: 'DEMO', password: 'DEMO' })
   const { login, logout, register, authError: error } = useAuth()
 
   const handleSignUp = () => {
     setCreate(true)
+    setUser({ name: '', password: '' })
   }
 
   const handleSignIn = () => {
     setCreate(false)
+    setUser({ name: 'DEMO', password: 'DEMO' })
   }
 
   const label = create ? 'Inscrivez-vous' : 'Connexion'
@@ -143,6 +143,8 @@ function PopupLogin({ open, handleClose, signup = false, status }) {
             login={login}
             register={register}
             logout={logout}
+            user={user}
+            setUser={setUser}
           />
           {error ? (
             <Alert severity='error'>Erreur : {error.message}</Alert>
