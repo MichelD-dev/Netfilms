@@ -128,7 +128,7 @@ const Header = ({ movie, type = TYPE_MOVIE, noBookmarks = false }) => {
         </Snackbar>
       )}
 
-      {noBookmarks && !bookmarkCalled && (
+      {!bookmarkCalled && (
         <Snackbar
           open={bookmarkMessageOpen}
           autoHideDuration={4000}
