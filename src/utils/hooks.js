@@ -1,20 +1,26 @@
-import { useReducer, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { clientApi } from './clientApi'
 import { useClientNetfilms } from 'context/AuthContext'
+import { useImmerReducer } from 'use-immer'
 
 //------------------------------------------------------------------------//
 //--------------------------------HOOK USER-------------------------------//
 //------------------------------------------------------------------------//
 
-const reducer = (state, action) => {
+const reducer = (draft, action) => {
   switch (action.type) {
     case 'fetching':
-      return { status: 'fetching', data: null, error: null }
+      draft.status = 'fetching'
+      return
     case 'done':
-      return { status: 'done', data: action.payload, error: null }
+      draft.status = 'done'
+      draft.data = action.payload
+      return
     case 'fail':
-      return { status: 'error', data: null, error: action.error }
+      draft.status = 'error'
+      draft.error = action.error
+      return
     default:
       throw new Error(`L'action ${action.type} n'est pas supportée.`)
   }
@@ -27,7 +33,7 @@ const initialState = {
 }
 
 export function useFetchData() {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useImmerReducer(reducer, initialState)
   const { data, error, status } = state
 
   const execute = useCallback(promise => {

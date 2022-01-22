@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'context/AuthContext'
 import { HistoryMenu } from './HistoryMenu'
+import { useImmer } from 'use-immer'
 import 'pages/Netfilms.css'
 
 const margin = { margin: '10px 20px' }
@@ -58,7 +59,7 @@ const NavBar = () => {
   const { logout } = useAuth()
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
-  const [appBarStyle, setAppBarStyle] = useState({
+  const [appBarStyle, setAppBarStyle] = useImmer({
     background: 'transparent',
     boxShadow: 'none',
     transition: 'background .5s ease-out',
@@ -67,14 +68,12 @@ const NavBar = () => {
   useEffect(() => {
     const onScroll = e => {
       if (e.target.documentElement.scrollTop >= 100) {
-        setAppBarStyle({
-          ...appBarStyle,
-          background: '#111',
+        setAppBarStyle(draft => {
+          draft.background = '#111'
         })
       } else {
-        setAppBarStyle({
-          ...appBarStyle,
-          background: 'transparent',
+        setAppBarStyle(draft => {
+          draft.background = 'transparent'
         })
       }
     }

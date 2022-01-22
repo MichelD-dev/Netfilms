@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useAuth } from 'context/AuthContext'
+import { useImmer } from 'use-immer'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +29,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const FormLogin = ({ user: { name, password }, setUser, create = false }) => {
+const FormLogin = ({ create = false }) => {
   const { login, register } = useAuth()
   const [checked, setChecked] = useState(false)
+  const [{ name, password }, setUser] = useImmer({ name: '', password: '' })
 
   const classes = useStyles()
   const label = create ? 'Inscrivez-vous' : 'Connexion'
@@ -43,8 +45,11 @@ const FormLogin = ({ user: { name, password }, setUser, create = false }) => {
         color='secondary'
         autoComplete='off'
         value={name}
-        onChange={e => setUser({ name: e.target.value, password })}
-        style={{ opacity: '1' }}
+        onChange={e =>
+          setUser(draft => {
+            draft.name = e.target.value
+          })
+        }
       />
       <TextField
         id='filled-basic'
@@ -53,7 +58,11 @@ const FormLogin = ({ user: { name, password }, setUser, create = false }) => {
         variant='filled'
         autoComplete='off'
         value={password}
-        onChange={e => setUser({ password: e.target.value, name })}
+        onChange={e =>
+          setUser(draft => {
+            draft.password = e.target.value
+          })
+        }
       />
       {create ? (
         <>
@@ -106,17 +115,14 @@ const FormLogin = ({ user: { name, password }, setUser, create = false }) => {
 function PopupLogin({ open, handleClose, signup = false, status }) {
   const classes = useStyles()
   const [create, setCreate] = useState(signup)
-  const [user, setUser] = useState({ name: 'DEMO', password: 'DEMO' })
   const { login, logout, register, authError: error } = useAuth()
 
   const handleSignUp = () => {
     setCreate(true)
-    setUser({ name: '', password: '' })
   }
 
   const handleSignIn = () => {
     setCreate(false)
-    setUser({ name: 'DEMO', password: 'DEMO' })
   }
 
   const label = create ? 'Inscrivez-vous' : 'Connexion'
@@ -143,8 +149,6 @@ function PopupLogin({ open, handleClose, signup = false, status }) {
             login={login}
             register={register}
             logout={logout}
-            user={user}
-            setUser={setUser}
           />
           {error ? (
             <Alert severity='error'>Erreur : {error.message}</Alert>
