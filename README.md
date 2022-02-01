@@ -11,3 +11,5 @@
 ### Site mis en ligne sur Netlify.
 
 https://netfilms.netlify.app/
+
+Inscription avec n'importe quelle chaîne de caractères.
